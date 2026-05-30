@@ -30,3 +30,11 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - First words: "I am NovaBrain, the AI core of NovaOS"
 - Use llama-completion for single-shot queries
 - Next: Termux Android bootstrap
+
+### Milestone 4 — Termux Android Bootstrap ✓
+- nova-termux-install.sh — full guided installer
+- nova-quick-install.sh — one-command install
+- nova command with: start, update, status, brain, encrypt
+- privacy.conf — telemetry disabled by default
+- novaos-0.1-alpha.zip — distributable package
+- Next: Test on Samsung Remote Test Lab
