@@ -22,3 +22,11 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - 512-bit keyfile generation working
 - Encrypt/decrypt/secure-delete all functional
 - Next: NovaBrain local AI daemon
+
+### Milestone 3 — NovaBrain AI Daemon ✓
+- llama.cpp compiled natively on Ryzen 7 5700U
+- Phi-3 Mini 3.8B model running at 3.1 tokens/sec
+- Zero cloud, zero telemetry, fully local
+- First words: "I am NovaBrain, the AI core of NovaOS"
+- Use llama-completion for single-shot queries
+- Next: Termux Android bootstrap
