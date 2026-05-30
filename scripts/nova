@@ -38,8 +38,7 @@ echo -e "${RESET}"
 
 nova_ask() {
     if [ -z "$1" ]; then
-        echo -e "${RED}[!] Usage: nova ask \"your question\"${RESET}"
-        exit 1
+        echo -e "${RED}[!] Usage: nova ask \"question\"${RESET}"; exit 1
     fi
     echo -e "${CYAN}[NovaBrain]${RESET} Thinking..."
     RESPONSE=$(python3 /usr/local/bin/nova-brain-query.py "$@")
@@ -48,19 +47,14 @@ nova_ask() {
 
 nova_brain_start() {
     echo -e "${CYAN}[*]${RESET} Starting NovaBrain server..."
-    "$LLAMA_SERVER" \
-        -m "$MODEL" \
-        -t 8 -c 2048 \
-        --port 11434 \
-        --log-disable \
-        -ngl 0 &
-    echo -e "${CYAN}[*]${RESET} Loading model into RAM (~20 seconds)..."
+    "$LLAMA_SERVER" -m "$MODEL" -t 8 -c 2048 --port 11434 --log-disable -ngl 0 &
+    echo -e "${CYAN}[*]${RESET} Loading model (~20 seconds)..."
     sleep 20
     HEALTH=$(curl -s http://localhost:11434/health 2>/dev/null)
     if echo "$HEALTH" | grep -q "ok"; then
-        echo -e "${GREEN}[✓]${RESET} NovaBrain ready on port 11434"
+        echo -e "${GREEN}[✓]${RESET} NovaBrain ready"
     else
-        echo -e "${CYAN}[*]${RESET} Still loading — try: nova ask in 10 seconds"
+        echo -e "${CYAN}[*]${RESET} Still loading — try nova ask in 10 seconds"
     fi
 }
 
@@ -69,26 +63,16 @@ nova_status() {
     echo -e "${GREEN}║      NovaOS Privacy Status           ║${RESET}"
     echo -e "${GREEN}╚══════════════════════════════════════╝${RESET}"
     echo ""
-    if command -v cryptsetup &>/dev/null; then
-        echo -e "  ${GREEN}[✓]${RESET} Encryption: cryptsetup $(cryptsetup --version | cut -d' ' -f2)"
-    else
+    command -v cryptsetup &>/dev/null && \
+        echo -e "  ${GREEN}[✓]${RESET} Encryption: cryptsetup $(cryptsetup --version | cut -d' ' -f2)" || \
         echo -e "  ${RED}[✗]${RESET} Encryption: not found"
-    fi
-    if command -v wg &>/dev/null; then
-        echo -e "  ${GREEN}[✓]${RESET} VPN: WireGuard ready"
-    else
+    command -v wg &>/dev/null && \
+        echo -e "  ${GREEN}[✓]${RESET} VPN: WireGuard $(wg --version | cut -d' ' -f2)" || \
         echo -e "  ${RED}[✗]${RESET} VPN: WireGuard not found"
-    fi
-    BRAIN_HEALTH=$(curl -s http://localhost:11434/health 2>/dev/null)
-    if echo "$BRAIN_HEALTH" | grep -q "ok"; then
-        echo -e "  ${GREEN}[✓]${RESET} NovaBrain: running on port 11434"
-    else
+    curl -s http://localhost:11434/health 2>/dev/null | grep -q "ok" && \
+        echo -e "  ${GREEN}[✓]${RESET} NovaBrain: running on port 11434" || \
         echo -e "  ${RED}[✗]${RESET} NovaBrain: offline — run: nova brain-start"
-    fi
-    if [ -f "$MODEL" ]; then
-        SIZE=$(du -h "$MODEL" | cut -f1)
-        echo -e "  ${GREEN}[✓]${RESET} Model: Phi-3 Mini ($SIZE) — local only"
-    fi
+    [ -f "$MODEL" ] && echo -e "  ${GREEN}[✓]${RESET} Model: Phi-3 Mini ($(du -h $MODEL | cut -f1)) — local only"
     echo -e "  ${GREEN}[✓]${RESET} Telemetry: disabled"
     echo -e "  ${GREEN}[✓]${RESET} Cloud sync: disabled"
     echo -e "  ${GREEN}[✓]${RESET} Data collection: none"
@@ -100,10 +84,7 @@ nova_status() {
 }
 
 nova_encrypt() {
-    if [ -z "$1" ]; then
-        echo -e "${RED}[!] Usage: nova encrypt <file>${RESET}"
-        exit 1
-    fi
+    [ -z "$1" ] && echo -e "${RED}[!] Usage: nova encrypt <file>${RESET}" && exit 1
     KEYFILE="/tmp/nova-$(date +%s).key"
     bash "$CRYPT" genkey "$KEYFILE" 2>/dev/null
     bash "$CRYPT" encrypt "$1" "$1.nova" "$KEYFILE"
@@ -112,13 +93,18 @@ nova_encrypt() {
 }
 
 nova_decrypt() {
-    if [ -z "$1" ] || [ -z "$2" ]; then
-        echo -e "${RED}[!] Usage: nova decrypt <file.nova> <keyfile>${RESET}"
-        exit 1
-    fi
+    [ -z "$1" ] || [ -z "$2" ] && echo -e "${RED}[!] Usage: nova decrypt <file.nova> <keyfile>${RESET}" && exit 1
     OUTPUT="${1%.nova}"
     bash "$CRYPT" decrypt "$1" "$OUTPUT" "$2"
     echo -e "${GREEN}[✓]${RESET} Decrypted: ${BOLD}$OUTPUT${RESET}"
+}
+
+nova_vpn() {
+    bash /usr/local/bin/nova-vpn "$@"
+}
+
+nova_guard() {
+    python3 /usr/local/bin/nova-guard "$@"
 }
 
 nova_update() {
@@ -128,18 +114,29 @@ nova_update() {
     echo -e "${GREEN}[✓]${RESET} NovaOS updated"
 }
 
+nova_install() {
+    bash /usr/local/bin/nova-install "$@"
+}
+
 nova_help() {
     nova_banner
     echo -e "${BOLD}Usage:${RESET} nova <command> [args]"
     echo ""
-    echo -e "${GREEN}Commands:${RESET}"
-    echo -e "  ${CYAN}ask${RESET} \"question\"        Ask NovaBrain — instant, local, private"
+    echo -e "${GREEN}Core:${RESET}"
+    echo -e "  ${CYAN}ask${RESET} \"question\"        Ask NovaBrain AI — local, instant, private"
     echo -e "  ${CYAN}brain-start${RESET}           Start NovaBrain AI server"
-    echo -e "  ${CYAN}status${RESET}                Privacy and system status"
-    echo -e "  ${CYAN}encrypt${RESET} <file>        Encrypt with ChaCha20"
-    echo -e "  ${CYAN}decrypt${RESET} <f> <key>     Decrypt a file"
-    echo -e "  ${CYAN}update${RESET}                Update from GitHub"
+    echo -e "  ${CYAN}status${RESET}                Full privacy status"
     echo -e "  ${CYAN}banner${RESET}                Show coat of arms"
+    echo ""
+    echo -e "${GREEN}Security:${RESET}"
+    echo -e "  ${CYAN}encrypt${RESET} <file>        ChaCha20 file encryption"
+    echo -e "  ${CYAN}decrypt${RESET} <f> <key>     Decrypt a file"
+    echo -e "  ${CYAN}guard${RESET} watch <dir>     Real-time encryption watchdog"
+    echo -e "  ${CYAN}vpn${RESET} <command>         WireGuard VPN manager"
+    echo ""
+    echo -e "${GREEN}Apps:${RESET}"
+    echo -e "  ${CYAN}install${RESET} <app>         Install apps (Flatpak/Wine)"
+    echo -e "  ${CYAN}update${RESET}                Update NovaOS from GitHub"
     echo -e "  ${CYAN}version${RESET}               Version info"
     echo ""
     echo -e "${PURPLE}  PRIVATA · LIBERA · SECURA${RESET}"
@@ -152,6 +149,9 @@ case "$1" in
     status)       nova_status ;;
     encrypt)      nova_encrypt "$2" ;;
     decrypt)      nova_decrypt "$2" "$3" ;;
+    guard)        shift; nova_guard "$@" ;;
+    vpn)          shift; nova_vpn "$@" ;;
+    install)      shift; nova_install "$@" ;;
     update)       nova_update ;;
     banner)       nova_banner ;;
     version)      echo "NovaOS $VERSION — PRIVATA · LIBERA · SECURA" ;;
