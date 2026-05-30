@@ -52,3 +52,9 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - GUI window rendering on Windows desktop
 - AMD Ryzen 7 5700U + Radeon iGPU detected
 - Next: NovaOS logo + custom theming
+
+### Milestone 7 — Windows App Support ✓
+- Wine 10.0 installed
+- Windows apps run natively on NovaOS
+- Notepad confirmed working via WSLg
+- Next: Darling (macOS), nova-guard, WireGuard, boot splash
