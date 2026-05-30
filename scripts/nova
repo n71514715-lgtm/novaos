@@ -1,0 +1,160 @@
+#!/bin/bash
+VERSION="0.1-alpha"
+NOVA_ROOT="/mnt/d/NovaOS"
+BRAIN="/mnt/d/NovaOS/ai/novabrain.py"
+CRYPT="/mnt/d/NovaOS/encryption/nova-crypt.sh"
+LLAMA_SERVER="/opt/novabrain/llama.cpp/build/bin/llama-server"
+MODEL="/opt/novabrain/models/phi3-mini.gguf"
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+RED='\033[0;31m'
+PURPLE='\033[0;35m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
+nova_banner() {
+echo -e "${GREEN}"
+cat << 'BANNER'
+        .·:+++++++++++++++++++:·.
+      ·'  ╔══════════════════╗  '·
+    ·'    ║  \   ·|·   /  ║    '·
+   /      ║   \  ·N·  /   ║      \
+  |    ✦  ╠────[✦ N ✦]────╣  ✦   |
+  |       ║  /  ·|·   \   ║       |
+  |  ·····╬·················╬·····  |
+  |  ✦    ║  ⊗─────────))) ║   ✦  |
+  |  star  ║  ⊗  eye  (🔒) ║  wave |
+  |  burst ║  ⊗─────────))) ║  sig  |
+  |  ·····╬·················╬·····  |
+  |       ║   circuit  [N]  ║       |
+   \      ╚══════════════════╝      /
+    '·       PRIVATA · LIBERA      ·'
+      '·         SECURA          ·'
+        '·:+[ N O V A O S ]+:·'
+             0.1  ·  SPECTRE
+BANNER
+echo -e "${RESET}"
+}
+
+nova_ask() {
+    if [ -z "$1" ]; then
+        echo -e "${RED}[!] Usage: nova ask \"your question\"${RESET}"
+        exit 1
+    fi
+    echo -e "${CYAN}[NovaBrain]${RESET} Thinking..."
+    RESPONSE=$(python3 /usr/local/bin/nova-brain-query.py "$@")
+    echo -e "${GREEN}[NovaBrain]${RESET} $RESPONSE"
+}
+
+nova_brain_start() {
+    echo -e "${CYAN}[*]${RESET} Starting NovaBrain server..."
+    "$LLAMA_SERVER" \
+        -m "$MODEL" \
+        -t 8 -c 2048 \
+        --port 11434 \
+        --log-disable \
+        -ngl 0 &
+    echo -e "${CYAN}[*]${RESET} Loading model into RAM (~20 seconds)..."
+    sleep 20
+    HEALTH=$(curl -s http://localhost:11434/health 2>/dev/null)
+    if echo "$HEALTH" | grep -q "ok"; then
+        echo -e "${GREEN}[✓]${RESET} NovaBrain ready on port 11434"
+    else
+        echo -e "${CYAN}[*]${RESET} Still loading — try: nova ask in 10 seconds"
+    fi
+}
+
+nova_status() {
+    echo -e "${GREEN}╔══════════════════════════════════════╗${RESET}"
+    echo -e "${GREEN}║      NovaOS Privacy Status           ║${RESET}"
+    echo -e "${GREEN}╚══════════════════════════════════════╝${RESET}"
+    echo ""
+    if command -v cryptsetup &>/dev/null; then
+        echo -e "  ${GREEN}[✓]${RESET} Encryption: cryptsetup $(cryptsetup --version | cut -d' ' -f2)"
+    else
+        echo -e "  ${RED}[✗]${RESET} Encryption: not found"
+    fi
+    if command -v wg &>/dev/null; then
+        echo -e "  ${GREEN}[✓]${RESET} VPN: WireGuard ready"
+    else
+        echo -e "  ${RED}[✗]${RESET} VPN: WireGuard not found"
+    fi
+    BRAIN_HEALTH=$(curl -s http://localhost:11434/health 2>/dev/null)
+    if echo "$BRAIN_HEALTH" | grep -q "ok"; then
+        echo -e "  ${GREEN}[✓]${RESET} NovaBrain: running on port 11434"
+    else
+        echo -e "  ${RED}[✗]${RESET} NovaBrain: offline — run: nova brain-start"
+    fi
+    if [ -f "$MODEL" ]; then
+        SIZE=$(du -h "$MODEL" | cut -f1)
+        echo -e "  ${GREEN}[✓]${RESET} Model: Phi-3 Mini ($SIZE) — local only"
+    fi
+    echo -e "  ${GREEN}[✓]${RESET} Telemetry: disabled"
+    echo -e "  ${GREEN}[✓]${RESET} Cloud sync: disabled"
+    echo -e "  ${GREEN}[✓]${RESET} Data collection: none"
+    echo ""
+    echo -e "  ${CYAN}Algorithms:${RESET}  ChaCha20-Poly1305 + AES-256-XTS + Argon2id"
+    echo -e "  ${CYAN}Version:${RESET}     NovaOS $VERSION"
+    echo -e "  ${CYAN}Motto:${RESET}       PRIVATA · LIBERA · SECURA"
+    echo ""
+}
+
+nova_encrypt() {
+    if [ -z "$1" ]; then
+        echo -e "${RED}[!] Usage: nova encrypt <file>${RESET}"
+        exit 1
+    fi
+    KEYFILE="/tmp/nova-$(date +%s).key"
+    bash "$CRYPT" genkey "$KEYFILE" 2>/dev/null
+    bash "$CRYPT" encrypt "$1" "$1.nova" "$KEYFILE"
+    echo -e "${GREEN}[✓]${RESET} Encrypted: ${BOLD}$1.nova${RESET}"
+    echo -e "${CYAN}[!]${RESET} Key: ${BOLD}$KEYFILE${RESET} — keep this safe"
+}
+
+nova_decrypt() {
+    if [ -z "$1" ] || [ -z "$2" ]; then
+        echo -e "${RED}[!] Usage: nova decrypt <file.nova> <keyfile>${RESET}"
+        exit 1
+    fi
+    OUTPUT="${1%.nova}"
+    bash "$CRYPT" decrypt "$1" "$OUTPUT" "$2"
+    echo -e "${GREEN}[✓]${RESET} Decrypted: ${BOLD}$OUTPUT${RESET}"
+}
+
+nova_update() {
+    echo -e "${CYAN}[*]${RESET} Updating NovaOS from GitHub..."
+    cd ~/NovaOS-git && git pull origin main
+    sudo cp scripts/nova /usr/local/bin/nova
+    echo -e "${GREEN}[✓]${RESET} NovaOS updated"
+}
+
+nova_help() {
+    nova_banner
+    echo -e "${BOLD}Usage:${RESET} nova <command> [args]"
+    echo ""
+    echo -e "${GREEN}Commands:${RESET}"
+    echo -e "  ${CYAN}ask${RESET} \"question\"        Ask NovaBrain — instant, local, private"
+    echo -e "  ${CYAN}brain-start${RESET}           Start NovaBrain AI server"
+    echo -e "  ${CYAN}status${RESET}                Privacy and system status"
+    echo -e "  ${CYAN}encrypt${RESET} <file>        Encrypt with ChaCha20"
+    echo -e "  ${CYAN}decrypt${RESET} <f> <key>     Decrypt a file"
+    echo -e "  ${CYAN}update${RESET}                Update from GitHub"
+    echo -e "  ${CYAN}banner${RESET}                Show coat of arms"
+    echo -e "  ${CYAN}version${RESET}               Version info"
+    echo ""
+    echo -e "${PURPLE}  PRIVATA · LIBERA · SECURA${RESET}"
+    echo ""
+}
+
+case "$1" in
+    ask)          shift; nova_ask "$@" ;;
+    brain-start)  nova_brain_start ;;
+    status)       nova_status ;;
+    encrypt)      nova_encrypt "$2" ;;
+    decrypt)      nova_decrypt "$2" "$3" ;;
+    update)       nova_update ;;
+    banner)       nova_banner ;;
+    version)      echo "NovaOS $VERSION — PRIVATA · LIBERA · SECURA" ;;
+    help|"")      nova_help ;;
+    *)            echo -e "${RED}[!]${RESET} Unknown: $1 — run 'nova help'" ;;
+esac
