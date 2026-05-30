@@ -14,3 +14,11 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - Core packages: cryptsetup 2.8.6, WireGuard, Python 3.14.5, Git 2.54.0
 - 180 packages installed via pacman
 - Next: Encryption layer (LUKS2 + AES-256 + ChaCha20)
+
+### Milestone 2 — NovaCrypt Encryption Engine ✓
+- ChaCha20-Poly1305 file encryption working
+- AES-256-XTS disk cipher configured
+- Argon2id key derivation (memory-hard, bruteforce resistant)
+- 512-bit keyfile generation working
+- Encrypt/decrypt/secure-delete all functional
+- Next: NovaBrain local AI daemon
