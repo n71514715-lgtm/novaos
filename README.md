@@ -58,3 +58,10 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - Windows apps run natively on NovaOS
 - Notepad confirmed working via WSLg
 - Next: Darling (macOS), nova-guard, WireGuard, boot splash
+
+### Milestone 8 — nova-guard Real-time Encryption Watchdog ✓
+- Monitors directories for new files in real-time
+- Auto-encrypts files the moment they're created
+- Original file deleted — only encrypted .nova version survives
+- No other OS ships with this built in
+- Next: WireGuard VPN + boot experience
