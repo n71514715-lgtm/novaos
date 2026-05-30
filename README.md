@@ -45,3 +45,10 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - Installer logic validated via mock environment
 - Ready for real Termux deployment
 - Next: GitHub release + real device test
+
+### Milestone 6 — Desktop Shell ✓
+- XFCE4 desktop running via WSLg X11 forwarding
+- NovaOS identity showing in fastfetch
+- GUI window rendering on Windows desktop
+- AMD Ryzen 7 5700U + Radeon iGPU detected
+- Next: NovaOS logo + custom theming
