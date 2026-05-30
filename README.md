@@ -65,3 +65,11 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - Original file deleted — only encrypted .nova version survives
 - No other OS ships with this built in
 - Next: WireGuard VPN + boot experience
+
+### Milestone 9 — Boot Experience ✓
+- Coat of arms renders on every terminal open
+- Typewriter animation — "Private. Encrypted. Yours."
+- Real-time system checks: NovaCrypt, NovaBrain, nova-guard, nova-vpn
+- NovaBrain greeting with time of day
+- Auto-runs via .bashrc on every session
+- Next: Darling macOS layer + demo video
