@@ -38,3 +38,10 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - privacy.conf — telemetry disabled by default
 - novaos-0.1-alpha.zip — distributable package
 - Next: Test on Samsung Remote Test Lab
+
+### Milestone 5 — Termux Installer Validated ✓
+- Termux detection working correctly
+- Android SDK version check working (requires 7.0+)
+- Installer logic validated via mock environment
+- Ready for real Termux deployment
+- Next: GitHub release + real device test
