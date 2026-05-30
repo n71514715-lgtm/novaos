@@ -5,3 +5,12 @@ No telemetry. No cloud. No surveillance.
 Encryption: LUKS2 + AES-256 + ChaCha20 (stronger than Telegram)
 AI: Local llama.cpp + Phi-3 Mini (never leaves your device)
 Built on Arch Linux ARM + proot (rootless Android support)
+
+## Build Log
+### Milestone 1 — First Boot ✓
+- Date: 2026-05-30
+- NovaOS 0.1 (Spectre) aarch64 boots successfully
+- Running inside WSL2 via arch-chroot + QEMU translation
+- Core packages: cryptsetup 2.8.6, WireGuard, Python 3.14.5, Git 2.54.0
+- 180 packages installed via pacman
+- Next: Encryption layer (LUKS2 + AES-256 + ChaCha20)
