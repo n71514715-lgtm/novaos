@@ -108,3 +108,13 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - Zero logs, zero trace, zero licensing BS
 - Web portal: novaos gaming page live
 - Next: WebRTC browser streaming + Sunshine setup
+
+### Milestone 14 — nova-memory Personal Memory Engine ✓
+- Stores anything you want to remember locally
+- Full-text search across all memories
+- NovaBrain answers questions about your memories
+- SQLite + FTS5 — fast, encrypted, local
+- Types: note, idea, link, quote, meeting, code, dream
+- What Microsoft Recall should have been
+- Zero cloud, zero surveillance, zero leaks
+- Next: Tor routing + graphical installer

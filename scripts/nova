@@ -175,6 +175,7 @@ case "$1" in
     chat)         shift; python3 /usr/local/bin/nova-chat "$@" ;;
     sync)         shift; python3 /usr/local/bin/nova-sync "$@" ;;
     gaming)       shift; bash /usr/local/bin/nova-gaming "$@" ;;
+    memory)       shift; python3 /usr/local/bin/nova-memory "$@" ;;
     install)      shift; bash /usr/local/bin/nova-install "$@" ;;
     update)       cd ~/NovaOS-git && git pull origin main && sudo cp scripts/nova /usr/local/bin/nova && echo -e "${GREEN}[✓]${RESET} Updated" ;;
     banner)       nova_banner ;;
