@@ -153,6 +153,7 @@ case "$1" in
     id)           shift; nova-id "$@" ;;
     chat)         shift; python3 /usr/local/bin/nova-chat "$@" ;;
     sync)         shift; python3 /usr/local/bin/nova-sync "$@" ;;
+    gaming)       shift; bash /usr/local/bin/nova-gaming "$@" ;;
     vault)        shift; python3 /usr/local/bin/nova-vault "$@" ;;
     vpn)          shift; nova_vpn "$@" ;;
     install)      shift; nova_install "$@" ;;

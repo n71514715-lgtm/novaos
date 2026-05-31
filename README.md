@@ -98,3 +98,13 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - Hash verification — only changed files sync
 - Works over LAN or WireGuard tunnel
 - Next: Darling macOS layer + demo video
+
+### Milestone 13 — nova-gaming Cloud Gaming Layer ✓
+- Steam, Epic, GOG, EA, Ubisoft — all platforms supported
+- Runs inside any cloud GPU session (GFN, Shadow, Boosteroid)
+- Anti-mining watchdog — auto-bans miners instantly
+- Session wipe — credentials deleted after auth
+- Sunshine streaming server integration
+- Zero logs, zero trace, zero licensing BS
+- Web portal: novaos gaming page live
+- Next: WebRTC browser streaming + Sunshine setup
