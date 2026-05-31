@@ -127,3 +127,12 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - nova tor ip — compare real vs Tor IP
 - Beats Tails on ease of use
 - Next: nova-setup wizard + graphical installer
+
+### Milestone 16 — nova-setup First Run Wizard ✓
+- 6-step guided setup for any new user
+- Detects existing identity, vault, NovaBrain
+- Configures Tor, nova-guard, nova-memory
+- No terminal knowledge needed
+- Works for users in Tehran, Dhaka, Belgrade, anywhere
+- Beautiful summary screen at completion
+- Next: graphical installer + demo video
