@@ -90,3 +90,11 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - Sender identity via nova-id fingerprint
 - Port 51869 — works over LAN or WireGuard tunnel
 - Next: nova-sync encrypted file sync
+
+### Milestone 12 — nova-sync Encrypted P2P File Sync ✓
+- Direct device-to-device file sync
+- No Dropbox, no Google Drive, no iCloud
+- 3 files synced successfully in live test
+- Hash verification — only changed files sync
+- Works over LAN or WireGuard tunnel
+- Next: Darling macOS layer + demo video
