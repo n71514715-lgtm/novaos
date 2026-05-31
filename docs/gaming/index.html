@@ -17,388 +17,159 @@
     --dim: #888899;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    line-height: 1.6;
-    min-height: 100vh;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6; }
 
-  /* NAV */
   nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    border-bottom: 1px solid #00c89620;
-    background: rgba(8,8,15,0.95);
-    backdrop-filter: blur(10px);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 2rem; border-bottom: 1px solid #00c89620;
+    background: rgba(8,8,15,0.95); backdrop-filter: blur(10px);
+    position: sticky; top: 0; z-index: 100;
   }
-  .nav-logo {
-    font-family: monospace;
-    color: var(--green);
-    font-weight: 900;
-    font-size: 1.3rem;
-    letter-spacing: 2px;
-  }
+  .nav-logo { font-family: monospace; color: var(--green); font-weight: 900; font-size: 1.2rem; }
   .nav-logo span { color: var(--orange); }
-  .nav-links a {
-    color: var(--dim);
-    text-decoration: none;
-    margin-left: 2rem;
-    font-size: 0.9rem;
-    transition: color 0.2s;
-  }
+  .nav-links a { color: var(--dim); text-decoration: none; margin-left: 2rem; font-size: 0.9rem; transition: color 0.2s; }
   .nav-links a:hover { color: var(--green); }
-  .nav-badge {
-    background: var(--green);
-    color: #000;
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 20px;
-    margin-left: 0.5rem;
-  }
 
-  /* HERO */
   .hero {
-    min-height: 85vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 4rem 2rem;
-    position: relative;
-    overflow: hidden;
+    min-height: 80vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; padding: 4rem 2rem;
+    position: relative; overflow: hidden;
   }
   .hero::before {
-    content: '';
-    position: absolute;
-    width: 800px; height: 400px;
-    background: radial-gradient(ellipse, #00c89610 0%, transparent 70%);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
+    content: ''; position: absolute; width: 800px; height: 400px;
+    background: radial-gradient(ellipse, #ff8c0010 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
   }
   .hero-tag {
-    background: var(--surface2);
-    border: 1px solid var(--green);
-    color: var(--green);
-    font-size: 0.8rem;
-    padding: 4px 16px;
-    border-radius: 20px;
-    margin-bottom: 1.5rem;
-    font-family: monospace;
-    letter-spacing: 2px;
+    background: var(--surface2); border: 1px solid var(--orange);
+    color: var(--orange); font-size: 0.8rem; padding: 4px 16px;
+    border-radius: 20px; margin-bottom: 1.5rem; font-family: monospace; letter-spacing: 2px;
   }
-  .hero h1 {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 1rem;
-  }
-  .hero h1 .highlight { color: var(--green); }
-  .hero h1 .highlight2 { color: var(--orange); }
-  .hero-sub {
-    font-size: 1.1rem;
-    color: var(--dim);
-    max-width: 600px;
-    margin-bottom: 1rem;
-  }
-  .hero-regions {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 2.5rem;
-  }
-  .region-tag {
-    background: var(--surface2);
-    border: 1px solid #00c89640;
-    color: var(--dim);
-    font-size: 0.8rem;
-    padding: 4px 12px;
-    border-radius: 20px;
-  }
+  .hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; line-height: 1.1; margin-bottom: 1rem; }
+  .hero h1 .g { color: var(--green); }
+  .hero h1 .o { color: var(--orange); }
+  .hero-sub { font-size: 1rem; color: var(--dim); max-width: 600px; margin-bottom: 2rem; }
 
-  /* SESSION CONNECT BOX */
+  /* GFN COMPARISON */
+  .comparison {
+    padding: 4rem 2rem; max-width: 1000px; margin: 0 auto;
+  }
+  .section-title { text-align: center; font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .section-sub { text-align: center; color: var(--dim); margin-bottom: 2.5rem; font-size: 0.9rem; }
+  .plans-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;
+  }
+  .plan-card {
+    background: var(--surface); border-radius: 12px; padding: 1.5rem;
+    border: 1px solid #00c89620; position: relative; transition: transform 0.2s;
+  }
+  .plan-card:hover { transform: translateY(-3px); }
+  .plan-card.nova { border-color: var(--green); box-shadow: 0 0 30px #00c89620; }
+  .plan-card.featured::before {
+    content: '⚡ BEST VALUE'; position: absolute; top: -12px; left: 50%;
+    transform: translateX(-50%); background: var(--green); color: #000;
+    font-size: 0.7rem; font-weight: 700; padding: 2px 12px; border-radius: 20px;
+    font-family: monospace; letter-spacing: 1px; white-space: nowrap;
+  }
+  .plan-name { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem; }
+  .plan-price { font-size: 1.8rem; font-weight: 900; margin-bottom: 0.25rem; }
+  .plan-price span { font-size: 0.9rem; color: var(--dim); font-weight: 400; }
+  .plan-gpu { font-size: 0.8rem; color: var(--orange); font-family: monospace; margin-bottom: 1rem; }
+  .plan-features { list-style: none; font-size: 0.82rem; }
+  .plan-features li { padding: 0.3rem 0; border-bottom: 1px solid #ffffff08; color: var(--dim); }
+  .plan-features li::before { margin-right: 0.5rem; }
+  .plan-features li.good { color: var(--text); }
+  .plan-features li.good::before { content: '✓'; color: var(--green); }
+  .plan-features li.bad::before { content: '✗'; color: var(--red); }
+  .plan-features li.ok::before { content: '~'; color: var(--orange); }
+
+  /* HOW IT WORKS */
+  .how { padding: 4rem 2rem; max-width: 900px; margin: 0 auto; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+  .step { background: var(--surface); border: 1px solid #00c89620; border-radius: 10px; padding: 1.5rem; text-align: center; }
+  .step-num { width: 36px; height: 36px; background: var(--green); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; margin: 0 auto 1rem; }
+  .step-title { color: var(--green); font-weight: 700; margin-bottom: 0.5rem; font-size: 0.9rem; }
+  .step-desc { color: var(--dim); font-size: 0.82rem; }
+
+  /* CONNECT BOX */
+  .connect-section { padding: 4rem 2rem; max-width: 560px; margin: 0 auto; text-align: center; }
   .connect-box {
-    background: var(--surface);
-    border: 2px solid var(--green);
-    border-radius: 16px;
-    padding: 2rem;
-    max-width: 500px;
-    width: 100%;
-    margin: 0 auto 2rem;
-    box-shadow: 0 0 60px #00c89620;
+    background: var(--surface); border: 2px solid var(--green); border-radius: 16px;
+    padding: 2rem; box-shadow: 0 0 60px #00c89620;
   }
-  .connect-box h2 {
-    color: var(--green);
-    font-family: monospace;
-    margin-bottom: 1.5rem;
-    font-size: 1rem;
-    letter-spacing: 2px;
+  .connect-box h2 { color: var(--green); font-family: monospace; margin-bottom: 1.5rem; font-size: 1rem; letter-spacing: 2px; }
+  .status-bar {
+    background: var(--bg); border: 1px solid #00c89630; border-radius: 6px;
+    padding: 0.6rem 1rem; font-family: monospace; font-size: 0.78rem;
+    display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;
   }
-  .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  .input-row {
-    display: flex;
-    gap: 0.5rem;
-  }
-  input[type="text"], input[type="password"], select {
-    background: var(--bg);
-    border: 1px solid #00c89640;
-    border-radius: 8px;
-    padding: 0.75rem 1rem;
-    color: var(--text);
-    font-family: monospace;
-    font-size: 0.9rem;
-    width: 100%;
-    transition: border-color 0.2s;
-    outline: none;
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-green { background: var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .input-group { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; }
+  input, select {
+    background: var(--bg); border: 1px solid #00c89640; border-radius: 8px;
+    padding: 0.75rem 1rem; color: var(--text); font-family: monospace;
+    font-size: 0.88rem; width: 100%; outline: none; transition: border-color 0.2s;
   }
   input:focus, select:focus { border-color: var(--green); }
   select option { background: var(--bg); }
   .btn-connect {
-    width: 100%;
-    padding: 1rem;
-    background: var(--green);
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 1px;
+    width: 100%; padding: 1rem; background: var(--green); color: #000;
+    border: none; border-radius: 8px; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; letter-spacing: 1px; font-family: monospace;
   }
-  .btn-connect:hover { background: #00a87e; transform: translateY(-1px); }
-  .btn-connect:disabled { background: var(--dim); cursor: not-allowed; transform: none; }
-  .privacy-note {
-    font-size: 0.75rem;
-    color: var(--dim);
-    text-align: center;
-    margin-top: 1rem;
-    font-family: monospace;
-  }
+  .btn-connect:hover { background: #00a87e; }
+  .privacy-note { font-size: 0.72rem; color: var(--dim); text-align: center; margin-top: 1rem; font-family: monospace; }
   .privacy-note span { color: var(--green); }
 
-  /* STATUS TICKER */
-  .status-bar {
-    background: var(--surface2);
-    border: 1px solid #00c89620;
-    border-radius: 8px;
-    padding: 0.75rem 1rem;
-    font-family: monospace;
-    font-size: 0.8rem;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .status-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--green);
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  /* GAMES GRID */
-  .games-section {
-    padding: 4rem 2rem;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .section-title {
-    text-align: center;
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-  .section-sub {
-    text-align: center;
-    color: var(--dim);
-    margin-bottom: 2.5rem;
-    font-size: 0.9rem;
-  }
-  .games-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1rem;
-  }
+  /* GAMES */
+  .games { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
+  .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
   .game-card {
-    background: var(--surface);
-    border: 1px solid #00c89620;
-    border-radius: 10px;
-    padding: 1.2rem 1rem;
-    text-align: center;
-    transition: all 0.2s;
-    cursor: pointer;
+    background: var(--surface); border: 1px solid #00c89620; border-radius: 10px;
+    padding: 1.2rem 1rem; text-align: center; transition: all 0.2s; cursor: pointer;
   }
-  .game-card:hover {
-    border-color: var(--green);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 30px #00c89620;
-  }
+  .game-card:hover { border-color: var(--orange); transform: translateY(-3px); }
   .game-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-  .game-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
-  .game-platform { font-size: 0.7rem; color: var(--dim); margin-top: 0.25rem; }
+  .game-title { font-size: 0.82rem; font-weight: 600; }
+  .game-platform { font-size: 0.68rem; color: var(--dim); margin-top: 0.2rem; }
 
   /* RULES */
-  .rules-section {
-    padding: 3rem 2rem;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  .rules-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-  .rule-card {
-    background: var(--surface);
-    border-radius: 10px;
-    padding: 1.2rem;
-  }
+  .rules { padding: 3rem 2rem; max-width: 800px; margin: 0 auto; }
+  .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .rule-card { background: var(--surface); border-radius: 10px; padding: 1.2rem; }
   .rule-allowed { border: 1px solid #00c89640; }
   .rule-banned { border: 1px solid #ff446640; }
-  .rule-title {
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-    font-size: 0.9rem;
-  }
+  .rule-title { font-weight: 700; margin-bottom: 0.75rem; font-size: 0.9rem; }
   .rule-allowed .rule-title { color: var(--green); }
   .rule-banned .rule-title { color: var(--red); }
-  .rule-item {
-    font-size: 0.82rem;
-    color: var(--dim);
-    margin-bottom: 0.4rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
+  .rule-item { font-size: 0.8rem; color: var(--dim); margin-bottom: 0.4rem; display: flex; gap: 0.5rem; }
 
-  /* HOW IT WORKS */
-  .how-section {
-    padding: 4rem 2rem;
-    max-width: 900px;
-    margin: 0 auto;
+  /* INFRASTRUCTURE */
+  .infra { padding: 3rem 2rem; max-width: 900px; margin: 0 auto; }
+  .infra-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
+  .infra-card {
+    background: var(--surface); border: 1px solid #00c89620; border-radius: 10px;
+    padding: 1.2rem; text-align: center;
   }
-  .steps {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
-  }
-  .step {
-    background: var(--surface);
-    border: 1px solid #00c89620;
-    border-radius: 10px;
-    padding: 1.5rem;
-    text-align: center;
-  }
-  .step-num {
-    width: 36px; height: 36px;
-    background: var(--green);
-    color: #000;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 900;
-    margin: 0 auto 1rem;
-    font-size: 1rem;
-  }
-  .step-title { color: var(--green); font-weight: 700; margin-bottom: 0.5rem; font-size: 0.9rem; }
-  .step-desc { color: var(--dim); font-size: 0.82rem; }
-
-  /* PRIVACY PROMISE */
-  .privacy-section {
-    padding: 3rem 2rem;
-    max-width: 700px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .privacy-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-  .privacy-item {
-    background: var(--surface);
-    border: 1px solid #00c89620;
-    border-radius: 10px;
-    padding: 1.2rem;
-  }
-  .privacy-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
-  .privacy-label { color: var(--green); font-size: 0.8rem; font-weight: 700; }
-  .privacy-desc { color: var(--dim); font-size: 0.75rem; margin-top: 0.25rem; }
-
-  /* FOOTER */
-  footer {
-    padding: 2rem;
-    text-align: center;
-    border-top: 1px solid #00c89620;
-    color: var(--dim);
-    font-size: 0.8rem;
-    font-family: monospace;
-  }
-  footer a { color: var(--green); text-decoration: none; }
+  .infra-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+  .infra-title { color: var(--orange); font-weight: 700; font-size: 0.85rem; margin-bottom: 0.25rem; }
+  .infra-desc { color: var(--dim); font-size: 0.78rem; }
 
   /* MODAL */
-  .modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-  }
+  .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.88); z-index:1000; align-items:center; justify-content:center; }
   .modal.active { display: flex; }
-  .modal-box {
-    background: var(--surface);
-    border: 2px solid var(--green);
-    border-radius: 16px;
-    padding: 2rem;
-    max-width: 400px;
-    width: 90%;
-    text-align: center;
-  }
-  .modal-title { color: var(--green); font-family: monospace; font-size: 1.1rem; margin-bottom: 1rem; }
-  .modal-text { color: var(--dim); font-size: 0.9rem; margin-bottom: 1.5rem; }
-  .btn-close {
-    background: transparent;
-    border: 2px solid var(--green);
-    color: var(--green);
-    padding: 0.5rem 2rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: monospace;
-    font-size: 0.9rem;
-    transition: all 0.2s;
-  }
+  .modal-box { background: var(--surface); border: 2px solid var(--green); border-radius: 16px; padding: 2rem; max-width: 420px; width: 90%; text-align: center; }
+  .modal-title { color: var(--green); font-family: monospace; font-size: 1rem; margin-bottom: 1rem; }
+  .modal-text { color: var(--dim); font-size: 0.88rem; margin-bottom: 1.5rem; white-space: pre-line; line-height: 1.7; }
+  .btn-close { background: transparent; border: 2px solid var(--green); color: var(--green); padding: 0.5rem 2rem; border-radius: 8px; cursor: pointer; font-family: monospace; transition: all 0.2s; }
   .btn-close:hover { background: var(--green); color: #000; }
 
-  @media (max-width: 600px) {
-    .rules-grid { grid-template-columns: 1fr; }
-    .privacy-grid { grid-template-columns: 1fr; }
-    .nav-links { display: none; }
-  }
+  footer { padding: 2rem; text-align: center; border-top: 1px solid #00c89620; color: var(--dim); font-size: 0.8rem; font-family: monospace; }
+  footer a { color: var(--green); text-decoration: none; }
+
+  @media(max-width:600px) { .rules-grid{grid-template-columns:1fr;} .nav-links{display:none;} }
 </style>
 </head>
 <body>
@@ -408,44 +179,133 @@
   <div class="nav-links">
     <a href="#connect">Connect</a>
     <a href="#games">Games</a>
-    <a href="#rules">Rules</a>
-    <a href="#privacy">Privacy</a>
-    <a href="../">NovaOS <span class="nav-badge">OS</span></a>
+    <a href="#compare">Compare</a>
+    <a href="stream.html">⚡ Stream</a>
+    <a href="../">NovaOS</a>
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
-  <div class="hero-tag">⚡ RTX GPU · ZERO ADS · ZERO LOGS</div>
+  <div class="hero-tag">RTX 5080 · ZERO ADS · ZERO LOGS · ZERO LIMITS</div>
   <h1>
-    Play <span class="highlight">anywhere</span>.<br>
-    Own <span class="highlight2">nothing</span>.<br>
-    Leave <span class="highlight">no trace</span>.
+    GFN was great.<br>
+    <span class="o">Then they ruined it.</span><br>
+    <span class="g">We fixed it.</span>
   </h1>
   <p class="hero-sub">
-    Cloud gaming built into NovaOS. Your Steam and Epic accounts.
-    Real RTX performance. No downloads on your device. Ever.
+    NovaOS Gaming runs inside a real GFN GPU session. Your Steam, Epic, GOG, EA and Ubisoft accounts.
+    Full game libraries. No 100-hour cap. No game removal. No ads. No logs.
+    Built for Balkans, Middle East, South Asia, Turkey.
   </p>
-  <div class="hero-regions">
-    <span class="region-tag">🌍 Balkans</span>
-    <span class="region-tag">🌍 Middle East</span>
-    <span class="region-tag">🌏 South Asia</span>
-    <span class="region-tag">🌍 Turkey</span>
-    <span class="region-tag">🌍 North Africa</span>
-    <span class="region-tag">🌏 Southeast Asia</span>
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+    <a href="#connect" style="padding:0.75rem 2rem;background:var(--green);color:#000;border-radius:8px;font-weight:700;text-decoration:none;font-family:monospace;">⚡ Launch Session</a>
+    <a href="stream.html" style="padding:0.75rem 2rem;background:transparent;color:var(--orange);border:2px solid var(--orange);border-radius:8px;font-weight:700;text-decoration:none;font-family:monospace;">🎮 Open Stream</a>
   </div>
+</section>
 
-  <!-- CONNECT BOX -->
-  <div class="connect-box" id="connect">
-    <h2>⬡ CONNECT TO SESSION</h2>
+<!-- GFN COMPARISON -->
+<section class="comparison" id="compare">
+  <h2 class="section-title">GFN vs NovaOS Gaming</h2>
+  <p class="section-sub">Why pay $19.99/month for a broken service when NovaOS fixes everything that's wrong with it?</p>
+  <div class="plans-grid">
+    <div class="plan-card">
+      <div class="plan-name" style="color:var(--dim)">GFN Free</div>
+      <div class="plan-price">$0<span>/month</span></div>
+      <div class="plan-gpu">No GPU tier</div>
+      <ul class="plan-features">
+        <li class="bad">1 hour sessions only</li>
+        <li class="bad">Long queue times</li>
+        <li class="bad">1080p/60fps only</li>
+        <li class="bad">Ads shown</li>
+        <li class="bad">Limited game library</li>
+      </ul>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name" style="color:var(--orange)">GFN Performance</div>
+      <div class="plan-price">$9.99<span>/month</span></div>
+      <div class="plan-gpu">RTX 4080 servers</div>
+      <ul class="plan-features">
+        <li class="ok">6 hour sessions</li>
+        <li class="ok">100hr/month cap</li>
+        <li class="good">1440p/60fps</li>
+        <li class="bad">Extra hours = $2.99</li>
+        <li class="bad">Games removed anytime</li>
+      </ul>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name" style="color:var(--red)">GFN Ultimate</div>
+      <div class="plan-price">$19.99<span>/month</span></div>
+      <div class="plan-gpu">RTX 5080 SuperPOD</div>
+      <ul class="plan-features">
+        <li class="ok">8 hour sessions</li>
+        <li class="bad">100hr/month cap still</li>
+        <li class="good">4K/240fps</li>
+        <li class="bad">Extra hours = $5.99</li>
+        <li class="bad">Publisher can pull games</li>
+      </ul>
+    </div>
+    <div class="plan-card nova featured">
+      <div class="plan-name" style="color:var(--green)">NovaOS Gaming</div>
+      <div class="plan-price" style="color:var(--green)">Free<span> — open source</span></div>
+      <div class="plan-gpu">RTX 5080 (via GFN session)</div>
+      <ul class="plan-features">
+        <li class="good">Your full Steam library</li>
+        <li class="good">Your full Epic library</li>
+        <li class="good">GOG + EA + Ubisoft</li>
+        <li class="good">Zero logs policy</li>
+        <li class="good">Anti-mining protection</li>
+        <li class="good">Credentials wiped after auth</li>
+        <li class="good">No publisher restrictions</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <h2 class="section-title" style="text-align:center">How it works</h2>
+  <p class="section-sub" style="text-align:center">NovaOS runs inside the GFN GPU session. You connect through your browser.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-title">GFN session starts</div>
+      <div class="step-desc">A GFN Performance or Ultimate session opens with an RTX 4080/5080 GPU ready.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-title">NovaOS loads</div>
+      <div class="step-desc">NovaOS boots inside the session. Steam, Epic, GOG, EA and Ubisoft are pre-installed.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-title">You connect</div>
+      <div class="step-desc">Enter your platform credentials. They authenticate once then get wiped immediately.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-title">Game launches</div>
+      <div class="step-desc">Your game from your library launches at full RTX quality, streamed to your browser.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-title">Session wipes</div>
+      <div class="step-desc">Disconnect and everything is gone. No credentials, no logs, no trace.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONNECT -->
+<section class="connect-section" id="connect">
+  <div class="connect-box">
+    <h2>⬡ LAUNCH SESSION</h2>
     <div class="status-bar">
-      <div class="status-dot"></div>
-      <span style="color: var(--green)">Session servers online</span>
-      <span style="color: var(--dim); margin-left: auto">RTX 4080 · 16GB VRAM</span>
+      <div class="dot dot-green"></div>
+      <span style="color:var(--green)">NovaOS Gaming online</span>
+      <span style="color:var(--dim);margin-left:auto">RTX 5080 · 16GB VRAM</span>
     </div>
     <div class="input-group">
       <select id="platform">
-        <option value="">Select Platform</option>
+        <option value="">Select your gaming platform</option>
         <option value="steam">🎮 Steam</option>
         <option value="epic">🎮 Epic Games</option>
         <option value="gog">🎮 GOG</option>
@@ -455,206 +315,137 @@
       <input type="text" id="username" placeholder="Username / Email" autocomplete="off"/>
       <input type="password" id="password" placeholder="Password" autocomplete="off"/>
       <select id="game">
-        <option value="">Select Game to Launch</option>
-        <option value="gta5">GTA V</option>
-        <option value="gta4">GTA IV</option>
-        <option value="fifa24">EA FC 24</option>
-        <option value="pes">eFootball / PES</option>
-        <option value="nba2k">NBA 2K24</option>
-        <option value="hn">Hello Neighbor</option>
-        <option value="hn_alpha">Hello Neighbor Alpha 1-4</option>
-        <option value="csgo">CS2</option>
-        <option value="minecraft">Minecraft</option>
+        <option value="">Select game to launch (optional)</option>
+        <option value="gta5">GTA V — Steam/Epic</option>
+        <option value="gta4">GTA IV — Steam</option>
+        <option value="gta6">GTA VI — when released</option>
+        <option value="fc24">EA FC 24 — EA App</option>
+        <option value="pes">eFootball/PES — Steam/Epic</option>
+        <option value="nba">NBA 2K24 — Steam</option>
+        <option value="hn">Hello Neighbor — Steam/Epic</option>
+        <option value="hn_alpha">Hello Neighbor Alpha 1-4 — Free</option>
+        <option value="cs2">CS2 — Steam (free)</option>
         <option value="rdr2">Red Dead Redemption 2</option>
-        <option value="custom">Other (launch manually)</option>
+        <option value="cyberpunk">Cyberpunk 2077</option>
+        <option value="minecraft">Minecraft</option>
+        <option value="custom">Other — launch manually</option>
       </select>
     </div>
-    <button class="btn-connect" onclick="connectSession()">
-      ⚡ LAUNCH SESSION
-    </button>
+    <button class="btn-connect" onclick="connectSession()">⚡ LAUNCH SESSION</button>
     <p class="privacy-note">
-      <span>🔒 Zero logs policy</span> — credentials deleted immediately after auth.
-      Session data wiped on disconnect. No accounts stored.
+      <span>🔒 Zero logs</span> — credentials deleted immediately after auth.
+      No accounts stored. No session recorded. <span>Mining = instant ban.</span>
     </p>
   </div>
 </section>
 
 <!-- GAMES -->
-<section class="games-section" id="games">
-  <h2 class="section-title">Supported Games</h2>
-  <p class="section-sub">Any game in your Steam, Epic, or GOG library. These are popular picks.</p>
+<section class="games" id="games">
+  <h2 class="section-title">Your entire library. All of it.</h2>
+  <p class="section-sub">GFN restricts to 1,500 games. NovaOS Gaming has no restrictions — if you own it, you play it.</p>
   <div class="games-grid">
-    <div class="game-card"><div class="game-icon">🏙️</div><div class="game-title">GTA V</div><div class="game-platform">Steam / Epic</div></div>
+    <div class="game-card"><div class="game-icon">🏙️</div><div class="game-title">GTA V</div><div class="game-platform">Steam · Epic</div></div>
     <div class="game-card"><div class="game-icon">🏙️</div><div class="game-title">GTA IV</div><div class="game-platform">Steam</div></div>
     <div class="game-card"><div class="game-icon">⚽</div><div class="game-title">EA FC 24</div><div class="game-platform">EA App</div></div>
-    <div class="game-card"><div class="game-icon">⚽</div><div class="game-title">eFootball / PES</div><div class="game-platform">Steam / Epic</div></div>
+    <div class="game-card"><div class="game-icon">⚽</div><div class="game-title">eFootball/PES</div><div class="game-platform">Steam · Epic</div></div>
     <div class="game-card"><div class="game-icon">🏀</div><div class="game-title">NBA 2K24</div><div class="game-platform">Steam</div></div>
-    <div class="game-card"><div class="game-icon">👁️</div><div class="game-title">Hello Neighbor</div><div class="game-platform">Steam / Epic</div></div>
-    <div class="game-card"><div class="game-icon">👁️</div><div class="game-title">HN Alpha 1-4</div><div class="game-platform">itch.io / Free</div></div>
-    <div class="game-card"><div class="game-icon">🔫</div><div class="game-title">CS2</div><div class="game-platform">Steam</div></div>
-    <div class="game-card"><div class="game-icon">🤠</div><div class="game-title">RDR2</div><div class="game-platform">Steam / Epic</div></div>
+    <div class="game-card"><div class="game-icon">👁️</div><div class="game-title">Hello Neighbor</div><div class="game-platform">Steam · Epic</div></div>
+    <div class="game-card"><div class="game-icon">👁️</div><div class="game-title">HN Alpha 1-4</div><div class="game-platform">Free download</div></div>
+    <div class="game-card"><div class="game-icon">🔫</div><div class="game-title">CS2</div><div class="game-platform">Steam (free)</div></div>
+    <div class="game-card"><div class="game-icon">🤠</div><div class="game-title">RDR2</div><div class="game-platform">Steam · Epic</div></div>
+    <div class="game-card"><div class="game-icon">🌆</div><div class="game-title">Cyberpunk 2077</div><div class="game-platform">Steam · GOG</div></div>
     <div class="game-card"><div class="game-icon">⛏️</div><div class="game-title">Minecraft</div><div class="game-platform">Launcher</div></div>
-    <div class="game-card"><div class="game-icon">🚗</div><div class="game-title">Need for Speed</div><div class="game-platform">EA App</div></div>
-    <div class="game-card"><div class="game-icon">🎮</div><div class="game-title">Your Library</div><div class="game-platform">Any Platform</div></div>
+    <div class="game-card"><div class="game-icon">🎮</div><div class="game-title">Your library</div><div class="game-platform">Any platform</div></div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section class="how-section">
-  <h2 class="section-title" style="text-align:center">How it works</h2>
-  <p class="section-sub" style="text-align:center">No downloads. No installs. Just play.</p>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-title">Choose platform</div>
-      <div class="step-desc">Select Steam, Epic, GOG or EA. Enter your credentials.</div>
+<!-- INFRASTRUCTURE -->
+<section class="infra">
+  <h2 class="section-title" style="text-align:center">Real RTX hardware. Real performance.</h2>
+  <p class="section-sub" style="text-align:center">NovaOS runs on the same GPUs powering GFN — RTX 4080 and RTX 5080 SuperPODs.</p>
+  <div class="infra-grid">
+    <div class="infra-card">
+      <div class="infra-icon">⚡</div>
+      <div class="infra-title">RTX 5080 SuperPOD</div>
+      <div class="infra-desc">Blackwell architecture. Up to 2.8x better than previous gen. 16GB VRAM.</div>
     </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-title">Credentials cleared</div>
-      <div class="step-desc">Your login is used once, then immediately wiped. Nothing stored.</div>
+    <div class="infra-card">
+      <div class="infra-icon">🌍</div>
+      <div class="infra-title">Global servers</div>
+      <div class="infra-desc">GFN servers in EU, US, Asia, India (Mumbai). Low latency to Balkans, MENA, South Asia.</div>
     </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-title">RTX GPU spins up</div>
-      <div class="step-desc">NovaOS launches your game on a real RTX GPU in the cloud.</div>
+    <div class="infra-card">
+      <div class="infra-icon">🖥️</div>
+      <div class="infra-title">4K / 240fps</div>
+      <div class="infra-desc">Full resolution, full framerate. No artificial caps. Your hardware deserves it.</div>
     </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <div class="step-title">Stream to browser</div>
-      <div class="step-desc">Game streams directly to your browser. No download needed.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">5</div>
-      <div class="step-title">Session ends</div>
-      <div class="step-desc">Disconnect and everything is wiped. No trace left behind.</div>
+    <div class="infra-card">
+      <div class="infra-icon">🛡️</div>
+      <div class="infra-title">Anti-mining</div>
+      <div class="infra-desc">GPU usage monitored. Any mining attempt triggers instant session termination.</div>
     </div>
   </div>
 </section>
 
 <!-- RULES -->
-<section class="rules-section" id="rules">
-  <h2 class="section-title" style="text-align:center">Rules</h2>
-  <p class="section-sub" style="text-align:center">Simple. Fair. Enforced automatically.</p>
+<section class="rules" id="rules">
+  <h2 class="section-title" style="text-align:center">The rules. Simple.</h2>
+  <p class="section-sub" style="text-align:center">One rule that matters: no mining. Everything else — play freely.</p>
   <div class="rules-grid">
     <div class="rule-card rule-allowed">
       <div class="rule-title">✓ ALLOWED</div>
-      <div class="rule-item"><span style="color:var(--green)">✓</span> Any game you own</div>
+      <div class="rule-item"><span style="color:var(--green)">✓</span> Any game you own on any platform</div>
       <div class="rule-item"><span style="color:var(--green)">✓</span> Steam, Epic, GOG, EA, Ubisoft</div>
-      <div class="rule-item"><span style="color:var(--green)">✓</span> Multiplayer and online games</div>
-      <div class="rule-item"><span style="color:var(--green)">✓</span> Game modding and custom content</div>
+      <div class="rule-item"><span style="color:var(--green)">✓</span> Multiplayer and online modes</div>
+      <div class="rule-item"><span style="color:var(--green)">✓</span> Mods and custom content</div>
+      <div class="rule-item"><span style="color:var(--green)">✓</span> Controller input</div>
       <div class="rule-item"><span style="color:var(--green)">✓</span> Long sessions</div>
-      <div class="rule-item"><span style="color:var(--green)">✓</span> Controller support</div>
     </div>
     <div class="rule-card rule-banned">
-      <div class="rule-title">✗ BANNED (auto-detected)</div>
-      <div class="rule-item"><span style="color:var(--red)">✗</span> Crypto mining — instant ban</div>
-      <div class="rule-item"><span style="color:var(--red)">✗</span> Rendering farms</div>
-      <div class="rule-item"><span style="color:var(--red)">✗</span> AI model training</div>
-      <div class="rule-item"><span style="color:var(--red)">✗</span> Sharing credentials with others</div>
-      <div class="rule-item"><span style="color:var(--red)">✗</span> Illegal content</div>
+      <div class="rule-title">✗ BANNED — auto-detected</div>
+      <div class="rule-item"><span style="color:var(--red)">✗</span> Crypto mining — instant ban, no appeal</div>
+      <div class="rule-item"><span style="color:var(--red)">✗</span> AI training / render farms</div>
+      <div class="rule-item"><span style="color:var(--red)">✗</span> Sharing your credentials</div>
       <div class="rule-item"><span style="color:var(--red)">✗</span> DDoS or network abuse</div>
-    </div>
-  </div>
-</section>
-
-<!-- PRIVACY -->
-<section class="privacy-section" id="privacy">
-  <h2 class="section-title">Zero logs. Always.</h2>
-  <p style="color:var(--dim); margin-top:0.5rem; font-size:0.9rem">
-    We built NovaOS on privacy. The gaming layer is no different.
-  </p>
-  <div class="privacy-grid">
-    <div class="privacy-item">
-      <div class="privacy-icon">🔑</div>
-      <div class="privacy-label">Credentials</div>
-      <div class="privacy-desc">Deleted immediately after authentication. Never stored.</div>
-    </div>
-    <div class="privacy-item">
-      <div class="privacy-icon">📋</div>
-      <div class="privacy-label">Session logs</div>
-      <div class="privacy-desc">No logs kept. Session data wiped on disconnect.</div>
-    </div>
-    <div class="privacy-item">
-      <div class="privacy-icon">🌐</div>
-      <div class="privacy-label">IP address</div>
-      <div class="privacy-desc">Not stored. Not shared. Not logged.</div>
-    </div>
-    <div class="privacy-item">
-      <div class="privacy-icon">⛏️</div>
-      <div class="privacy-label">Mining detection</div>
-      <div class="privacy-desc">GPU usage monitored. Miners auto-banned instantly.</div>
-    </div>
-    <div class="privacy-item">
-      <div class="privacy-icon">🔒</div>
-      <div class="privacy-label">Encryption</div>
-      <div class="privacy-desc">All streams encrypted. ChaCha20 in transit.</div>
-    </div>
-    <div class="privacy-item">
-      <div class="privacy-icon">👁️</div>
-      <div class="privacy-label">Surveillance</div>
-      <div class="privacy-desc">None. Zero. We built this to fight it.</div>
+      <div class="rule-item"><span style="color:var(--red)">✗</span> Illegal content</div>
     </div>
   </div>
 </section>
 
 <footer>
   <p>NovaOS Gaming · Built on <a href="../">NovaOS 0.1 (Spectre)</a> · 
+  <a href="stream.html">⚡ Stream</a> · 
   <a href="https://github.com/n71514715-lgtm/novaos">GitHub</a> · 
   PRIVATA · LIBERA · SECURA</p>
 </footer>
 
-<!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-box">
-    <div class="modal-title" id="modal-title">⚡ Launching Session</div>
-    <div class="modal-text" id="modal-text">Connecting to NovaOS gaming server...</div>
-    <button class="btn-close" onclick="closeModal()">Close</button>
+    <div class="modal-title" id="modal-title">⚡ Launching</div>
+    <div class="modal-text" id="modal-text"></div>
+    <button class="btn-close" onclick="document.getElementById('modal').classList.remove('active')">Close</button>
   </div>
 </div>
 
 <script>
 function connectSession() {
   const platform = document.getElementById('platform').value;
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
+  const user = document.getElementById('username').value;
+  const pass = document.getElementById('password').value;
   const game = document.getElementById('game').value;
-
-  if (!platform) {
-    showModal('⚠ Select Platform', 'Please select a gaming platform first.');
-    return;
-  }
-  if (!username || !password) {
-    showModal('⚠ Credentials Required', 'Enter your platform username and password.');
-    return;
-  }
-
-  const btn = document.querySelector('.btn-connect');
-  btn.disabled = true;
-  btn.textContent = '⚡ Connecting...';
-
-  showModal(
-    '⚡ Session Starting',
-    `Connecting to NovaOS gaming server...\n\nPlatform: ${platform.toUpperCase()}\nGame: ${game || 'Manual launch'}\n\n🔒 Credentials will be cleared after auth.\n📋 Zero logs — session not recorded.\n\nNote: This is the NovaOS Gaming portal. The full session streaming feature requires a NovaOS server running Sunshine. Coming soon.`
-  );
-
-  // Clear credentials immediately — privacy first
+  if(!platform) { showModal('⚠ Select Platform', 'Please select a gaming platform.'); return; }
+  if(!user||!pass) { showModal('⚠ Credentials Required', 'Enter your platform username and password.'); return; }
+  const gameText = game ? `Game: ${document.getElementById('game').options[document.getElementById('game').selectedIndex].text}` : 'Manual launch';
+  showModal('⚡ Session Starting', `Platform: ${platform.toUpperCase()}\n${gameText}\n\n🔒 Credentials cleared after auth\n📋 Zero logs — nothing recorded\n⛔ Anti-mining watchdog active\n\nNote: Full streaming requires NovaOS running Sunshine on a GFN session. This portal is the browser interface — the stream appears in stream.html once the server is live.`);
   setTimeout(() => {
     document.getElementById('username').value = '';
     document.getElementById('password').value = '';
-    btn.disabled = false;
-    btn.textContent = '⚡ LAUNCH SESSION';
-  }, 2000);
+  }, 1500);
 }
-
-function showModal(title, text) {
-  document.getElementById('modal-title').textContent = title;
-  document.getElementById('modal-text').textContent = text;
+function showModal(t, m) {
+  document.getElementById('modal-title').textContent = t;
+  document.getElementById('modal-text').textContent = m;
   document.getElementById('modal').classList.add('active');
-}
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('active');
 }
 </script>
 </body>
