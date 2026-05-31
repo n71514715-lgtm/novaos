@@ -73,3 +73,12 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - NovaBrain greeting with time of day
 - Auto-runs via .bashrc on every session
 - Next: Darling macOS layer + demo video
+
+### Milestone 10 — Identity + Vault ✓
+- nova-id: Ed25519 cryptographic identity (same as Signal/SSH)
+- Sign and verify files with your NovaOS key
+- Fingerprint: unique per device, cryptographically generated
+- nova-vault: encrypted password manager
+- AES-256 + PBKDF2 (600,000 iterations)
+- Zero cloud, zero sync, zero breach risk
+- Next: nova-chat encrypted messaging + nova-sync

@@ -150,6 +150,8 @@ case "$1" in
     encrypt)      nova_encrypt "$2" ;;
     decrypt)      nova_decrypt "$2" "$3" ;;
     guard)        shift; nova_guard "$@" ;;
+    id)           shift; nova-id "$@" ;;
+    vault)        shift; python3 /usr/local/bin/nova-vault "$@" ;;
     vpn)          shift; nova_vpn "$@" ;;
     install)      shift; nova_install "$@" ;;
     update)       nova_update ;;
