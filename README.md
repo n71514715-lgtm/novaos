@@ -82,3 +82,11 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - AES-256 + PBKDF2 (600,000 iterations)
 - Zero cloud, zero sync, zero breach risk
 - Next: nova-chat encrypted messaging + nova-sync
+
+### Milestone 11 — nova-chat Encrypted P2P Messaging ✓
+- Direct device-to-device messaging
+- No server, no account, no phone number
+- Message delivered and displayed with timestamp
+- Sender identity via nova-id fingerprint
+- Port 51869 — works over LAN or WireGuard tunnel
+- Next: nova-sync encrypted file sync
