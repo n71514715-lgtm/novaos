@@ -9,6 +9,7 @@ GREEN='\033[0;32m'
 CYAN='\033[0;36m'
 RED='\033[0;31m'
 PURPLE='\033[0;35m'
+ORANGE='\033[0;33m'
 BOLD='\033[1m'
 RESET='\033[0m'
 
@@ -37,9 +38,7 @@ echo -e "${RESET}"
 }
 
 nova_ask() {
-    if [ -z "$1" ]; then
-        echo -e "${RED}[!] Usage: nova ask \"question\"${RESET}"; exit 1
-    fi
+    [ -z "$1" ] && echo -e "${RED}[!] Usage: nova ask \"question\"${RESET}" && exit 1
     echo -e "${CYAN}[NovaBrain]${RESET} Thinking..."
     RESPONSE=$(python3 /usr/local/bin/nova-brain-query.py "$@")
     echo -e "${GREEN}[NovaBrain]${RESET} $RESPONSE"
@@ -50,18 +49,15 @@ nova_brain_start() {
     "$LLAMA_SERVER" -m "$MODEL" -t 8 -c 2048 --port 11434 --log-disable -ngl 0 &
     echo -e "${CYAN}[*]${RESET} Loading model (~20 seconds)..."
     sleep 20
-    HEALTH=$(curl -s http://localhost:11434/health 2>/dev/null)
-    if echo "$HEALTH" | grep -q "ok"; then
-        echo -e "${GREEN}[✓]${RESET} NovaBrain ready"
-    else
+    curl -s http://localhost:11434/health 2>/dev/null | grep -q "ok" && \
+        echo -e "${GREEN}[✓]${RESET} NovaBrain ready" || \
         echo -e "${CYAN}[*]${RESET} Still loading — try nova ask in 10 seconds"
-    fi
 }
 
 nova_status() {
-    echo -e "${GREEN}╔══════════════════════════════════════╗${RESET}"
-    echo -e "${GREEN}║      NovaOS Privacy Status           ║${RESET}"
-    echo -e "${GREEN}╚══════════════════════════════════════╝${RESET}"
+    echo -e "${GREEN}╔══════════════════════════════════════════╗${RESET}"
+    echo -e "${GREEN}║      NovaOS Privacy Status               ║${RESET}"
+    echo -e "${GREEN}╚══════════════════════════════════════════╝${RESET}"
     echo ""
     command -v cryptsetup &>/dev/null && \
         echo -e "  ${GREEN}[✓]${RESET} Encryption: cryptsetup $(cryptsetup --version | cut -d' ' -f2)" || \
@@ -73,6 +69,12 @@ nova_status() {
         echo -e "  ${GREEN}[✓]${RESET} NovaBrain: running on port 11434" || \
         echo -e "  ${RED}[✗]${RESET} NovaBrain: offline — run: nova brain-start"
     [ -f "$MODEL" ] && echo -e "  ${GREEN}[✓]${RESET} Model: Phi-3 Mini ($(du -h $MODEL | cut -f1)) — local only"
+    [ -f "$HOME/.nova/identity/identity.json" ] && \
+        echo -e "  ${GREEN}[✓]${RESET} Identity: $(python3 -c "import json; print(json.load(open('$HOME/.nova/identity/identity.json'))['name'])" 2>/dev/null)" || \
+        echo -e "  ${RED}[✗]${RESET} Identity: none — run: nova id generate"
+    [ -f "$HOME/.nova/vault/vault.enc" ] && \
+        echo -e "  ${GREEN}[✓]${RESET} Vault: encrypted vault exists" || \
+        echo -e "  ${RED}[✗]${RESET} Vault: none — run: nova vault init"
     echo -e "  ${GREEN}[✓]${RESET} Telemetry: disabled"
     echo -e "  ${GREEN}[✓]${RESET} Cloud sync: disabled"
     echo -e "  ${GREEN}[✓]${RESET} Data collection: none"
@@ -94,50 +96,67 @@ nova_encrypt() {
 
 nova_decrypt() {
     [ -z "$1" ] || [ -z "$2" ] && echo -e "${RED}[!] Usage: nova decrypt <file.nova> <keyfile>${RESET}" && exit 1
-    OUTPUT="${1%.nova}"
-    bash "$CRYPT" decrypt "$1" "$OUTPUT" "$2"
-    echo -e "${GREEN}[✓]${RESET} Decrypted: ${BOLD}$OUTPUT${RESET}"
-}
-
-nova_vpn() {
-    bash /usr/local/bin/nova-vpn "$@"
-}
-
-nova_guard() {
-    python3 /usr/local/bin/nova-guard "$@"
-}
-
-nova_update() {
-    echo -e "${CYAN}[*]${RESET} Updating NovaOS from GitHub..."
-    cd ~/NovaOS-git && git pull origin main
-    sudo cp scripts/nova /usr/local/bin/nova
-    echo -e "${GREEN}[✓]${RESET} NovaOS updated"
-}
-
-nova_install() {
-    bash /usr/local/bin/nova-install "$@"
+    bash "$CRYPT" decrypt "$1" "${1%.nova}" "$2"
+    echo -e "${GREEN}[✓]${RESET} Decrypted: ${BOLD}${1%.nova}${RESET}"
 }
 
 nova_help() {
     nova_banner
-    echo -e "${BOLD}Usage:${RESET} nova <command> [args]"
+    echo -e "${BOLD}NovaOS $VERSION — Complete Command Reference${RESET}"
     echo ""
-    echo -e "${GREEN}Core:${RESET}"
-    echo -e "  ${CYAN}ask${RESET} \"question\"        Ask NovaBrain AI — local, instant, private"
-    echo -e "  ${CYAN}brain-start${RESET}           Start NovaBrain AI server"
-    echo -e "  ${CYAN}status${RESET}                Full privacy status"
-    echo -e "  ${CYAN}banner${RESET}                Show coat of arms"
+    echo -e "${GREEN}━━━ AI ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+    echo -e "  ${CYAN}ask${RESET} \"question\"        NovaBrain AI — local, instant, private"
+    echo -e "  ${CYAN}brain-start${RESET}           Start NovaBrain AI server (port 11434)"
     echo ""
-    echo -e "${GREEN}Security:${RESET}"
-    echo -e "  ${CYAN}encrypt${RESET} <file>        ChaCha20 file encryption"
-    echo -e "  ${CYAN}decrypt${RESET} <f> <key>     Decrypt a file"
+    echo -e "${GREEN}━━━ SECURITY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+    echo -e "  ${CYAN}encrypt${RESET} <file>        ChaCha20 + AES-256 file encryption"
+    echo -e "  ${CYAN}decrypt${RESET} <f> <key>     Decrypt a .nova file"
     echo -e "  ${CYAN}guard${RESET} watch <dir>     Real-time encryption watchdog"
-    echo -e "  ${CYAN}vpn${RESET} <command>         WireGuard VPN manager"
+    echo -e "  ${CYAN}guard${RESET} watch <dir> --auto  Auto-encrypt new files"
+    echo -e "  ${CYAN}vpn${RESET} genkeys           Generate WireGuard keypair"
+    echo -e "  ${CYAN}vpn${RESET} start/stop        Start/stop VPN tunnel"
+    echo -e "  ${CYAN}vpn${RESET} status            VPN status + public key"
     echo ""
-    echo -e "${GREEN}Apps:${RESET}"
-    echo -e "  ${CYAN}install${RESET} <app>         Install apps (Flatpak/Wine)"
-    echo -e "  ${CYAN}update${RESET}                Update NovaOS from GitHub"
-    echo -e "  ${CYAN}version${RESET}               Version info"
+    echo -e "${GREEN}━━━ IDENTITY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+    echo -e "  ${CYAN}id${RESET} generate \"Name\"    Create Ed25519 identity keypair"
+    echo -e "  ${CYAN}id${RESET} show               Show your identity + fingerprint"
+    echo -e "  ${CYAN}id${RESET} sign <file>        Sign a file with your key"
+    echo -e "  ${CYAN}id${RESET} verify <file>      Verify a file signature"
+    echo -e "  ${CYAN}id${RESET} export             Export your public key"
+    echo ""
+    echo -e "${GREEN}━━━ VAULT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+    echo -e "  ${CYAN}vault${RESET} init             Create encrypted password vault"
+    echo -e "  ${CYAN}vault${RESET} add              Add password entry"
+    echo -e "  ${CYAN}vault${RESET} list             List all entries"
+    echo -e "  ${CYAN}vault${RESET} get <id>         Get entry with password"
+    echo ""
+    echo -e "${GREEN}━━━ COMMUNICATION ━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+    echo -e "  ${CYAN}chat${RESET} listen            Receive encrypted messages"
+    echo -e "  ${CYAN}chat${RESET} send <ip> <msg>   Send encrypted P2P message"
+    echo -e "  ${CYAN}chat${RESET} history           Message history"
+    echo -e "  ${CYAN}sync${RESET} folder <path>     Add folder to sync"
+    echo -e "  ${CYAN}sync${RESET} serve             Start sync server"
+    echo -e "  ${CYAN}sync${RESET} pull <peer> <f>   Pull files from peer"
+    echo ""
+    echo -e "${GREEN}━━━ GAMING ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+    echo -e "  ${CYAN}gaming${RESET} setup           Install Steam/Epic/GOG/EA/Ubisoft"
+    echo -e "  ${CYAN}gaming${RESET} launch steam    Launch Steam"
+    echo -e "  ${CYAN}gaming${RESET} launch epic     Launch Epic/GOG via Heroic"
+    echo -e "  ${CYAN}gaming${RESET} launch ea       Launch EA/Ubisoft via Lutris"
+    echo -e "  ${CYAN}gaming${RESET} stream          Start Sunshine streaming server"
+    echo -e "  ${CYAN}gaming${RESET} wipe            Wipe all session data"
+    echo -e "  ${CYAN}gaming${RESET} watchdog        Start anti-mining watchdog"
+    echo ""
+    echo -e "${GREEN}━━━ APPS & SYSTEM ━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+    echo -e "  ${CYAN}install${RESET} <app>          Install apps (Flatpak/Wine)"
+    echo -e "  ${CYAN}update${RESET}                 Update NovaOS from GitHub"
+    echo -e "  ${CYAN}status${RESET}                 Full privacy + system status"
+    echo -e "  ${CYAN}banner${RESET}                 Show coat of arms"
+    echo -e "  ${CYAN}version${RESET}                Version info"
+    echo ""
+    echo -e "${ORANGE}  Website:  https://n71514715-lgtm.github.io/novaos${RESET}"
+    echo -e "${ORANGE}  Gaming:   https://n71514715-lgtm.github.io/novaos/gaming${RESET}"
+    echo -e "${ORANGE}  GitHub:   https://github.com/n71514715-lgtm/novaos${RESET}"
     echo ""
     echo -e "${PURPLE}  PRIVATA · LIBERA · SECURA${RESET}"
     echo ""
@@ -149,15 +168,15 @@ case "$1" in
     status)       nova_status ;;
     encrypt)      nova_encrypt "$2" ;;
     decrypt)      nova_decrypt "$2" "$3" ;;
-    guard)        shift; nova_guard "$@" ;;
-    id)           shift; nova-id "$@" ;;
+    guard)        shift; python3 /usr/local/bin/nova-guard "$@" ;;
+    vpn)          shift; bash /usr/local/bin/nova-vpn "$@" ;;
+    id)           shift; bash /usr/local/bin/nova-id "$@" ;;
+    vault)        shift; python3 /usr/local/bin/nova-vault "$@" ;;
     chat)         shift; python3 /usr/local/bin/nova-chat "$@" ;;
     sync)         shift; python3 /usr/local/bin/nova-sync "$@" ;;
     gaming)       shift; bash /usr/local/bin/nova-gaming "$@" ;;
-    vault)        shift; python3 /usr/local/bin/nova-vault "$@" ;;
-    vpn)          shift; nova_vpn "$@" ;;
-    install)      shift; nova_install "$@" ;;
-    update)       nova_update ;;
+    install)      shift; bash /usr/local/bin/nova-install "$@" ;;
+    update)       cd ~/NovaOS-git && git pull origin main && sudo cp scripts/nova /usr/local/bin/nova && echo -e "${GREEN}[✓]${RESET} Updated" ;;
     banner)       nova_banner ;;
     version)      echo "NovaOS $VERSION — PRIVATA · LIBERA · SECURA" ;;
     help|"")      nova_help ;;
