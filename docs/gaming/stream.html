@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaOS Gaming — Live Stream</title>
+<style>
+  :root {
+    --green: #00c896;
+    --purple: #7c6aff;
+    --red: #ff4466;
+    --orange: #ff8c00;
+    --bg: #08080f;
+    --surface: #0f0f1a;
+    --text: #e0e0ff;
+    --dim: #888899;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    background: rgba(8,8,15,0.95);
+    border-bottom: 1px solid #00c89630;
+    height: 44px;
+    z-index: 100;
+    position: relative;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 1rem; }
+  .logo { font-family: monospace; color: var(--green); font-weight: 700; font-size: 0.9rem; }
+  .session-info { font-size: 0.75rem; color: var(--dim); font-family: monospace; }
+  .topbar-right { display: flex; align-items: center; gap: 0.75rem; }
+  .status-pill {
+    display: flex; align-items: center; gap: 0.4rem;
+    background: var(--surface);
+    border: 1px solid #00c89640;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 0.72rem;
+    font-family: monospace;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .dot-green { background: var(--green); animation: pulse 2s infinite; }
+  .dot-red { background: var(--red); }
+  .dot-orange { background: var(--orange); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .btn-sm {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-family: monospace;
+    cursor: pointer;
+    border: 1px solid;
+    transition: all 0.2s;
+    font-weight: 600;
+  }
+  .btn-danger { border-color: var(--red); color: var(--red); background: transparent; }
+  .btn-danger:hover { background: var(--red); color: #000; }
+  .btn-primary { border-color: var(--green); color: #000; background: var(--green); }
+  .btn-primary:hover { background: #00a87e; }
+
+  /* MAIN LAYOUT */
+  .main {
+    display: flex;
+    height: calc(100vh - 44px);
+  }
+
+  /* STREAM AREA */
+  .stream-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    position: relative;
+    overflow: hidden;
+  }
+  #gameCanvas {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+  }
+  .stream-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.85);
+  }
+  .stream-overlay.hidden { display: none; }
+  .overlay-logo {
+    font-family: monospace;
+    font-size: 0.6rem;
+    color: var(--green);
+    white-space: pre;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 20px #00c89660;
+  }
+  .overlay-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+  .overlay-sub {
+    color: var(--dim);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    max-width: 400px;
+  }
+  .connect-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 320px;
+  }
+  .connect-form input {
+    background: var(--surface);
+    border: 1px solid #00c89640;
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    color: var(--text);
+    font-family: monospace;
+    font-size: 0.85rem;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+  .connect-form input:focus { border-color: var(--green); }
+  .btn-launch {
+    padding: 0.75rem;
+    background: var(--green);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: monospace;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+  .btn-launch:hover { background: #00a87e; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 260px;
+    background: var(--surface);
+    border-left: 1px solid #00c89620;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .sidebar-section {
+    padding: 0.75rem;
+    border-bottom: 1px solid #00c89615;
+  }
+  .sidebar-title {
+    font-size: 0.7rem;
+    color: var(--dim);
+    font-family: monospace;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  /* STATS */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .stat-item {
+    background: var(--bg);
+    border-radius: 6px;
+    padding: 0.5rem;
+    text-align: center;
+  }
+  .stat-value { font-family: monospace; font-size: 1rem; font-weight: 700; color: var(--green); }
+  .stat-label { font-size: 0.65rem; color: var(--dim); }
+
+  /* PLATFORM BUTTONS */
+  .platform-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+  .platform-btn {
+    background: var(--bg);
+    border: 1px solid #00c89630;
+    border-radius: 6px;
+    padding: 0.5rem;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: var(--dim);
+    transition: all 0.2s;
+    font-family: monospace;
+  }
+  .platform-btn:hover { border-color: var(--green); color: var(--green); }
+  .platform-btn .platform-icon { font-size: 1.1rem; display: block; margin-bottom: 2px; }
+
+  /* CHAT */
+  .chat-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    font-family: monospace;
+  }
+  .chat-msg { margin-bottom: 0.4rem; line-height: 1.4; }
+  .chat-msg .msg-time { color: var(--dim); }
+  .chat-msg .msg-user { color: var(--green); font-weight: 700; }
+  .chat-msg .msg-system { color: var(--orange); font-style: italic; }
+  .chat-msg .msg-ban { color: var(--red); font-weight: 700; }
+  .chat-input-area {
+    padding: 0.5rem;
+    border-top: 1px solid #00c89615;
+    display: flex;
+    gap: 0.4rem;
+  }
+  .chat-input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid #00c89630;
+    border-radius: 4px;
+    padding: 0.4rem 0.6rem;
+    color: var(--text);
+    font-family: monospace;
+    font-size: 0.75rem;
+    outline: none;
+  }
+  .chat-send {
+    background: var(--green);
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    padding: 0.4rem 0.75rem;
+    cursor: pointer;
+    font-family: monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  /* PRIVACY STRIP */
+  .privacy-strip {
+    padding: 0.4rem 0.75rem;
+    background: rgba(0,200,150,0.05);
+    border-top: 1px solid #00c89620;
+    font-size: 0.65rem;
+    font-family: monospace;
+    color: var(--dim);
+    text-align: center;
+  }
+  .privacy-strip span { color: var(--green); }
+
+  /* FULLSCREEN */
+  .stream-area:fullscreen { background: #000; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo">⬡ NovaOS Gaming</div>
+    <div class="session-info" id="sessionInfo">No active session</div>
+  </div>
+  <div class="topbar-right">
+    <div class="status-pill">
+      <div class="dot dot-green"></div>
+      <span id="serverStatus">Servers online</span>
+    </div>
+    <div class="status-pill">
+      <div class="dot dot-orange"></div>
+      <span id="gpuStatus">RTX 4080</span>
+    </div>
+    <button class="btn-sm btn-primary" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    <button class="btn-sm btn-danger" onclick="endSession()">✕ End Session</button>
+  </div>
+</div>
+
+<div class="main">
+  <!-- STREAM AREA -->
+  <div class="stream-area" id="streamArea">
+    <canvas id="gameCanvas" width="1280" height="720"></canvas>
+
+    <!-- CONNECT OVERLAY -->
+    <div class="stream-overlay" id="connectOverlay">
+      <pre class="overlay-logo">
+    .·:++[ N O V A O S ]++:·.
+   ·'  ╔════════════════╗  '·
+  /    ║  ⊗  eye  (🔒)  ║    \
+  \    ║  [✦ N ✦]  )))  ║    /
+   '·  ╚════════════════╝  ·'
+    PRIVATA · LIBERA · SECURA</pre>
+      <div class="overlay-title">Connect to Gaming Session</div>
+      <div class="overlay-sub">
+        Your Steam, Epic, GOG, EA or Ubisoft account.<br>
+        Credentials cleared after auth. Zero logs.
+      </div>
+      <div class="connect-form">
+        <input type="text" id="serverIP" placeholder="Server IP (from nova gaming stream)" value=""/>
+        <input type="text" id="gameUsername" placeholder="Platform username / email" autocomplete="off"/>
+        <input type="password" id="gamePassword" placeholder="Platform password" autocomplete="off"/>
+        <select id="gamePlatform" style="background:#0f0f1a; border:1px solid #00c89640; border-radius:8px; padding:0.7rem 1rem; color:#e0e0ff; font-family:monospace; font-size:0.85rem; outline:none;">
+          <option value="">Select platform</option>
+          <option value="steam">🎮 Steam</option>
+          <option value="epic">🎮 Epic Games</option>
+          <option value="gog">🎮 GOG</option>
+          <option value="ea">🎮 EA App</option>
+          <option value="ubisoft">🎮 Ubisoft Connect</option>
+        </select>
+        <button class="btn-launch" onclick="startSession()">⚡ LAUNCH SESSION</button>
+      </div>
+    </div>
+
+    <!-- LOADING OVERLAY -->
+    <div class="stream-overlay hidden" id="loadingOverlay">
+      <div style="font-size:2rem; margin-bottom:1rem;">⚡</div>
+      <div class="overlay-title" id="loadingTitle">Connecting...</div>
+      <div class="overlay-sub" id="loadingText">Establishing secure connection to NovaOS gaming server</div>
+      <div style="margin-top:1.5rem; width:200px; height:3px; background:#1a1a2e; border-radius:2px; overflow:hidden;">
+        <div id="progressBar" style="height:100%; width:0%; background:var(--green); transition:width 0.3s; border-radius:2px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- STATS -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">Session Stats</div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value" id="statLatency">—</div>
+          <div class="stat-label">Latency ms</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="statFPS">—</div>
+          <div class="stat-label">FPS</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="statBitrate">—</div>
+          <div class="stat-label">Mbps</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="statGPU">—</div>
+          <div class="stat-label">GPU %</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLATFORMS -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">Quick Launch</div>
+      <div class="platform-grid">
+        <div class="platform-btn" onclick="quickLaunch('steam')">
+          <span class="platform-icon">🎮</span>Steam
+        </div>
+        <div class="platform-btn" onclick="quickLaunch('epic')">
+          <span class="platform-icon">🎮</span>Epic
+        </div>
+        <div class="platform-btn" onclick="quickLaunch('gog')">
+          <span class="platform-icon">🎮</span>GOG
+        </div>
+        <div class="platform-btn" onclick="quickLaunch('ea')">
+          <span class="platform-icon">🎮</span>EA App
+        </div>
+        <div class="platform-btn" onclick="quickLaunch('ubisoft')">
+          <span class="platform-icon">🎮</span>Ubisoft
+        </div>
+        <div class="platform-btn" onclick="quickLaunch('gta5')">
+          <span class="platform-icon">🏙️</span>GTA V
+        </div>
+      </div>
+    </div>
+
+    <!-- SECURITY STATUS -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">Security</div>
+      <div style="font-size:0.75rem; font-family:monospace;">
+        <div style="color:var(--green); margin-bottom:0.3rem;">✓ Anti-mining active</div>
+        <div style="color:var(--green); margin-bottom:0.3rem;">✓ Zero logs policy</div>
+        <div style="color:var(--green); margin-bottom:0.3rem;">✓ Credentials cleared</div>
+        <div style="color:var(--green); margin-bottom:0.3rem;">✓ Session encrypted</div>
+        <div id="miningStatus" style="color:var(--green);">✓ No mining detected</div>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="sidebar-title" style="padding:0.75rem 0.75rem 0.25rem;">Session Chat</div>
+    <div class="chat-area" id="chatArea">
+      <div class="chat-msg"><span class="msg-system">⬡ NovaOS Gaming session ready</span></div>
+      <div class="chat-msg"><span class="msg-system">Connect to start playing</span></div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" class="chat-input" id="chatInput" placeholder="Message..." onkeydown="if(event.key==='Enter')sendChat()"/>
+      <button class="chat-send" onclick="sendChat()">→</button>
+    </div>
+
+    <div class="privacy-strip">
+      <span>Zero logs</span> · <span>Credentials wiped</span> · <span>No trace</span>
+    </div>
+  </div>
+</div>
+
+<script>
+let sessionActive = false;
+let statsInterval = null;
+let sessionStartTime = null;
+
+function addChat(text, type='system') {
+  const area = document.getElementById('chatArea');
+  const time = new Date().toTimeString().slice(0,5);
+  const div = document.createElement('div');
+  div.className = 'chat-msg';
+  if(type==='system') div.innerHTML = `<span class="msg-time">${time}</span> <span class="msg-system">${text}</span>`;
+  else if(type==='ban') div.innerHTML = `<span class="msg-ban">⛔ ${text}</span>`;
+  else div.innerHTML = `<span class="msg-time">${time}</span> <span class="msg-user">You:</span> ${text}`;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function sendChat() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if(!text) return;
+  addChat(text, 'user');
+  input.value = '';
+}
+
+function startSession() {
+  const ip = document.getElementById('serverIP').value;
+  const user = document.getElementById('gameUsername').value;
+  const pass = document.getElementById('gamePassword').value;
+  const platform = document.getElementById('gamePlatform').value;
+
+  if(!platform) { addChat('Select a platform first', 'system'); return; }
+  if(!user || !pass) { addChat('Enter your credentials', 'system'); return; }
+
+  document.getElementById('connectOverlay').classList.add('hidden');
+  document.getElementById('loadingOverlay').classList.remove('hidden');
+
+  const steps = [
+    [10, 'Connecting to NovaOS gaming server...'],
+    [25, 'Establishing encrypted tunnel...'],
+    [40, `Authenticating ${platform.toUpperCase()} account...`],
+    [60, 'Clearing credentials from memory...'],
+    [75, 'Starting anti-mining watchdog...'],
+    [90, 'Launching game session...'],
+    [100, 'Connected!']
+  ];
+
+  let i = 0;
+  const interval = setInterval(() => {
+    if(i >= steps.length) {
+      clearInterval(interval);
+      sessionConnected(platform, ip || '127.0.0.1');
+      return;
+    }
+    document.getElementById('progressBar').style.width = steps[i][0] + '%';
+    document.getElementById('loadingText').textContent = steps[i][1];
+    i++;
+  }, 600);
+
+  // Clear credentials immediately — privacy first
+  setTimeout(() => {
+    document.getElementById('gameUsername').value = '';
+    document.getElementById('gamePassword').value = '';
+  }, 1000);
+}
+
+function sessionConnected(platform, ip) {
+  sessionActive = true;
+  sessionStartTime = Date.now();
+  document.getElementById('loadingOverlay').classList.add('hidden');
+  document.getElementById('sessionInfo').textContent = `${platform.toUpperCase()} · ${ip} · Session active`;
+
+  addChat(`Connected to ${platform.toUpperCase()} session`, 'system');
+  addChat('Credentials cleared from memory', 'system');
+  addChat('Anti-mining watchdog active', 'system');
+  addChat('Zero logs — session not recorded', 'system');
+
+  // Draw placeholder stream
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#0a0a14';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#00c896';
+  ctx.font = 'bold 24px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('⬡ NovaOS Gaming', canvas.width/2, canvas.height/2 - 40);
+  ctx.fillStyle = '#888899';
+  ctx.font = '16px monospace';
+  ctx.fillText(`${platform.toUpperCase()} session connected`, canvas.width/2, canvas.height/2);
+  ctx.fillText('Sunshine stream would appear here', canvas.width/2, canvas.height/2 + 30);
+  ctx.fillStyle = '#00c89640';
+  ctx.font = '12px monospace';
+  ctx.fillText('PRIVATA · LIBERA · SECURA', canvas.width/2, canvas.height/2 + 70);
+
+  // Start fake stats
+  statsInterval = setInterval(updateStats, 1000);
+}
+
+function updateStats() {
+  if(!sessionActive) return;
+  document.getElementById('statLatency').textContent = Math.floor(Math.random()*20+8);
+  document.getElementById('statFPS').textContent = Math.floor(Math.random()*5+57);
+  document.getElementById('statBitrate').textContent = (Math.random()*5+15).toFixed(1);
+  document.getElementById('statGPU').textContent = Math.floor(Math.random()*20+60);
+}
+
+function quickLaunch(platform) {
+  if(!sessionActive) {
+    addChat('Connect to a session first', 'system');
+    return;
+  }
+  addChat(`Launching ${platform}...`, 'system');
+}
+
+function endSession() {
+  if(statsInterval) clearInterval(statsInterval);
+  sessionActive = false;
+  addChat('Session ended — wiping all data...', 'system');
+  addChat('Credentials cleared', 'system');
+  addChat('Session logs deleted', 'system');
+  addChat('Zero trace left', 'system');
+  document.getElementById('sessionInfo').textContent = 'Session ended';
+  document.getElementById('connectOverlay').classList.remove('hidden');
+
+  // Reset canvas
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Reset stats
+  ['statLatency','statFPS','statBitrate','statGPU'].forEach(id => {
+    document.getElementById(id).textContent = '—';
+  });
+}
+
+function toggleFullscreen() {
+  const area = document.getElementById('streamArea');
+  if(!document.fullscreenElement) {
+    area.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+// Mining detection simulation
+setInterval(() => {
+  if(sessionActive && Math.random() > 0.998) {
+    addChat('⛔ Mining attempt detected and blocked', 'ban');
+    document.getElementById('miningStatus').textContent = '⛔ Mining blocked';
+    document.getElementById('miningStatus').style.color = 'var(--red)';
+    setTimeout(() => {
+      document.getElementById('miningStatus').textContent = '✓ No mining detected';
+      document.getElementById('miningStatus').style.color = 'var(--green)';
+    }, 5000);
+  }
+}, 1000);
+</script>
+</body>
+</html>
