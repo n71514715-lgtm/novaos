@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaOS — Privacy First. Always.</title>
+<style>
+  :root {
+    --green: #00c896;
+    --purple: #7c6aff;
+    --red: #ff4466;
+    --bg: #08080f;
+    --surface: #0f0f1a;
+    --surface2: #141428;
+    --text: #e0e0ff;
+    --dim: #888899;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    line-height: 1.6;
+  }
+  /* NAV */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #00c89620;
+    position: sticky;
+    top: 0;
+    background: rgba(8,8,15,0.95);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+  }
+  .nav-logo { color: var(--green); font-weight: 700; font-size: 1.2rem; }
+  .nav-links a {
+    color: var(--dim);
+    text-decoration: none;
+    margin-left: 2rem;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--green); }
+
+  /* HERO */
+  .hero {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #00c89615 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .ascii-logo {
+    font-size: 0.6rem;
+    line-height: 1.2;
+    color: var(--green);
+    margin-bottom: 2rem;
+    text-shadow: 0 0 20px #00c89660;
+    white-space: pre;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+  }
+  .hero h1 span { color: var(--green); }
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--dim);
+    margin-bottom: 2rem;
+    max-width: 600px;
+  }
+  .motto {
+    color: var(--purple);
+    font-size: 0.9rem;
+    letter-spacing: 4px;
+    margin-bottom: 3rem;
+  }
+  .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+  .btn {
+    padding: 0.75rem 2rem;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+  .btn-primary {
+    background: var(--green);
+    color: #000;
+    border: 2px solid var(--green);
+  }
+  .btn-primary:hover { background: transparent; color: var(--green); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--green);
+    border: 2px solid var(--green);
+  }
+  .btn-secondary:hover { background: var(--green); color: #000; }
+
+  /* TERMINAL DEMO */
+  .terminal-section {
+    padding: 4rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .terminal {
+    background: #000;
+    border: 1px solid #00c89640;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 60px #00c89620;
+  }
+  .terminal-bar {
+    background: var(--surface2);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid #00c89620;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-red { background: #ff5f57; }
+  .dot-yellow { background: #febc2e; }
+  .dot-green { background: #28c840; }
+  .terminal-title { color: var(--dim); font-size: 0.8rem; margin-left: 0.5rem; }
+  .terminal-body { padding: 1.5rem; font-size: 0.85rem; line-height: 1.8; }
+  .t-prompt { color: var(--green); }
+  .t-cmd { color: var(--text); }
+  .t-output { color: var(--dim); }
+  .t-success { color: var(--green); }
+  .t-brain { color: #00c896; }
+  .t-enc { color: var(--purple); }
+
+  /* FEATURES */
+  .features {
+    padding: 4rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .section-title {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+  .section-sub {
+    text-align: center;
+    color: var(--dim);
+    margin-bottom: 3rem;
+    font-size: 0.9rem;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid #00c89620;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .feature-card:hover {
+    border-color: var(--green);
+    transform: translateY(-2px);
+  }
+  .feature-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+  .feature-title { color: var(--green); font-weight: 700; margin-bottom: 0.5rem; }
+  .feature-desc { color: var(--dim); font-size: 0.85rem; }
+
+  /* INSTALL */
+  .install {
+    padding: 4rem 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .install-cmd {
+    background: #000;
+    border: 1px solid var(--green);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    font-size: 0.9rem;
+    color: var(--green);
+    margin: 1.5rem 0;
+    text-align: left;
+    position: relative;
+  }
+  .install-cmd::before {
+    content: '$ ';
+    color: var(--dim);
+  }
+
+  /* MANIFESTO */
+  .manifesto {
+    padding: 4rem 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    border-top: 1px solid #00c89620;
+  }
+  .manifesto p {
+    color: var(--dim);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+  .manifesto p strong { color: var(--text); }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem;
+    text-align: center;
+    border-top: 1px solid #00c89620;
+    color: var(--dim);
+    font-size: 0.8rem;
+  }
+  footer a { color: var(--green); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">⬡ NovaOS</div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#install">Install</a>
+    <a href="#manifesto">Manifesto</a>
+    <a href="https://github.com/n71514715-lgtm/novaos">GitHub</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <pre class="ascii-logo">
+        .·:+++++++++++++++++++:·.
+      ·'  ╔══════════════════╗  '·
+    ·'    ║  \   ·|·   /  ║    '·
+   /      ║   \  ·N·  /   ║      \
+  |    ✦  ╠────[✦ N ✦]────╣  ✦   |
+  |       ║  /  ·|·   \   ║       |
+  |  ·····╬·················╬·····  |
+  |  ✦    ║  ⊗─────────))) ║   ✦  |
+  |       ║  ⊗  eye  (🔒) ║  wave |
+  |       ║  ⊗─────────))) ║       |
+  |  ·····╬·················╬·····  |
+  |       ║   circuit  [N]  ║       |
+   \      ╚══════════════════╝      /
+    '·       PRIVATA · LIBERA      ·'
+      '·         SECURA          ·'
+        '·:+[ N O V A O S ]+:·'
+  </pre>
+  <h1>The OS that <span>fights back</span>.</h1>
+  <p class="hero-sub">
+    Privacy-first. Encrypted by default. AI built in.
+    Runs on any PC and rootless on any Android phone.
+    No cloud. No telemetry. No surveillance.
+  </p>
+  <p class="motto">PRIVATA · LIBERA · SECURA</p>
+  <div class="hero-buttons">
+    <a href="#install" class="btn btn-primary">Install Now</a>
+    <a href="https://github.com/n71514715-lgtm/novaos" class="btn btn-secondary">View Source</a>
+  </div>
+</section>
+
+<section class="terminal-section" id="demo">
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+      <span class="terminal-title">nova@novaos — terminal</span>
+    </div>
+    <div class="terminal-body">
+      <div><span class="t-prompt">nova@novaos</span><span class="t-cmd"> $ nova ask "are you watching me"</span></div>
+      <div><span class="t-brain">[NovaBrain]</span><span class="t-output"> Thinking...</span></div>
+      <div><span class="t-brain">[NovaBrain]</span><span class="t-success"> No. I don't watch you. Nothing leaves this device.</span></div>
+      <br>
+      <div><span class="t-prompt">nova@novaos</span><span class="t-cmd"> $ nova encrypt secret.txt</span></div>
+      <div><span class="t-success">[✓] Encrypted: secret.txt.nova</span></div>
+      <div><span class="t-enc">[!] Key: /tmp/nova-key — keep this safe</span></div>
+      <br>
+      <div><span class="t-prompt">nova@novaos</span><span class="t-cmd"> $ nova status</span></div>
+      <div><span class="t-success">[✓] NovaCrypt  online — ChaCha20 + AES-256 + Argon2id</span></div>
+      <div><span class="t-success">[✓] NovaBrain  online — Phi-3 Mini, local only</span></div>
+      <div><span class="t-success">[✓] nova-guard ready — real-time encryption watchdog</span></div>
+      <div><span class="t-success">[✓] nova-vpn   configured — WireGuard ready</span></div>
+      <div><span class="t-success">[✓] Telemetry: disabled | Cloud: none | Surveillance: none</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <h2 class="section-title">Built different.</h2>
+  <p class="section-sub">Every feature exists for one reason — your privacy.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🔐</div>
+      <div class="feature-title">NovaCrypt</div>
+      <div class="feature-desc">ChaCha20-Poly1305 + AES-256-XTS + Argon2id. Stronger than Telegram. Fully open source. Every file encrypted with battle-tested algorithms.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <div class="feature-title">NovaBrain AI</div>
+      <div class="feature-desc">Phi-3 Mini running locally via llama.cpp. Ask it anything. It never phones home. Your thoughts stay on your device. Always.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👁️</div>
+      <div class="feature-title">nova-guard</div>
+      <div class="feature-desc">Real-time encryption watchdog. Monitors your directories and auto-encrypts new files the moment they're created. No other OS has this.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🛡️</div>
+      <div class="feature-title">nova-vpn</div>
+      <div class="feature-desc">WireGuard VPN built in. One command generates your keypair. One command starts the tunnel. ChaCha20 encrypted. Zero logs.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📱</div>
+      <div class="feature-title">Android Support</div>
+      <div class="feature-desc">Runs rootless on any Android 7+ phone via Termux. No root required. One command install. Your phone becomes a privacy device.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🪟</div>
+      <div class="feature-title">Windows App Support</div>
+      <div class="feature-desc">Wine 10.0 built in. Run Windows applications on NovaOS. Full compatibility layer. Your tools, your OS, your rules.</div>
+    </div>
+  </div>
+</section>
+
+<section class="install" id="install">
+  <h2 class="section-title">Install NovaOS</h2>
+  <p class="section-sub">One command. Any Android phone. No root required.</p>
+  <div class="install-cmd">curl -sL https://raw.githubusercontent.com/n71514715-lgtm/novaos/main/termux/nova-quick-install.sh | bash</div>
+  <p style="color: var(--dim); font-size: 0.85rem;">
+    Requires Termux from F-Droid · Android 7.0+ · No root · No accounts
+  </p>
+  <br><br>
+  <p class="section-sub">Or clone and build from source:</p>
+  <div class="install-cmd">git clone https://github.com/n71514715-lgtm/novaos</div>
+</section>
+
+<section class="manifesto" id="manifesto">
+  <h2 class="section-title" style="text-align:left; margin-bottom: 1.5rem;">Why NovaOS exists.</h2>
+  <p><strong>Because your operating system shouldn't spy on you.</strong> Every major OS today phones home. Windows sends telemetry. Android reports to Google. macOS checks your apps with Apple. Even your privacy tools run on infrastructure owned by the same companies watching you.</p>
+  <p><strong>Because encryption should be the default, not the exception.</strong> NovaOS encrypts everything — your files, your communications, your AI queries — using open, audited algorithms. Not proprietary protocols. Not "trust us" encryption. Real cryptography.</p>
+  <p><strong>Because AI shouldn't require surrendering your data.</strong> NovaBrain runs entirely on your device. Your questions, your thoughts, your conversations — none of it leaves. The model weights sit on your SSD. The inference happens on your CPU. The cloud never sees a byte.</p>
+  <p><strong>Because the people who need privacy the most can least afford it.</strong> NovaOS runs on a $30 Android phone. It costs nothing. It requires no technical knowledge to install. It belongs to everyone.</p>
+  <p style="color: var(--purple); letter-spacing: 3px; margin-top: 2rem;">PRIVATA · LIBERA · SECURA</p>
+</section>
+
+<footer>
+  <p>NovaOS 0.1 (Spectre) · Open Source · <a href="https://github.com/n71514715-lgtm/novaos">GitHub</a> · Built in one day · For everyone who is tired of being watched.</p>
+</footer>
+
+</body>
+</html>
