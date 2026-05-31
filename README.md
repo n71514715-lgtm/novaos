@@ -118,3 +118,12 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - What Microsoft Recall should have been
 - Zero cloud, zero surveillance, zero leaks
 - Next: Tor routing + graphical installer
+
+### Milestone 15 — nova-tor Anonymity Layer ✓
+- Tor daemon starts with one command
+- Real IP hidden — verified working
+- torsocks routes any command through Tor
+- New identity on demand
+- nova tor ip — compare real vs Tor IP
+- Beats Tails on ease of use
+- Next: nova-setup wizard + graphical installer
