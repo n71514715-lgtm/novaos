@@ -136,3 +136,12 @@ Built on Arch Linux ARM + proot (rootless Android support)
 - Works for users in Tehran, Dhaka, Belgrade, anywhere
 - Beautiful summary screen at completion
 - Next: graphical installer + demo video
+
+### Milestone 17 — Security Suite ✓
+- nova-shield: real-time network monitor, detects suspicious connections
+- nova-panic: 4-level emergency wipe (session/credentials/identity/full)
+- nova-p2p-web: Tor hidden service — host .onion sites from your device
+- nova-audit: full security audit — processes, ports, files, integrity
+- nova-ai-train: fine-tune NovaBrain on your own documents locally
+- All integrated into nova command
+- Next: graphical installer + demo video

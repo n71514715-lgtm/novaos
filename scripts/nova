@@ -178,6 +178,11 @@ case "$1" in
     memory)       shift; python3 /usr/local/bin/nova-memory "$@" ;;
     tor)          shift; bash /usr/local/bin/nova-tor "$@" ;;
     setup)        python3 /usr/local/bin/nova-setup ;;
+    shield)       shift; python3 /usr/local/bin/nova-shield "$@" ;;
+    panic)        shift; bash /usr/local/bin/nova-panic "$@" ;;
+    p2p-web)      shift; python3 /usr/local/bin/nova-p2p-web "$@" ;;
+    audit)        shift; python3 /usr/local/bin/nova-audit "$@" ;;
+    ai-train)     shift; python3 /usr/local/bin/nova-ai-train "$@" ;;
     install)      shift; bash /usr/local/bin/nova-install "$@" ;;
     update)       cd ~/NovaOS-git && git pull origin main && sudo cp scripts/nova /usr/local/bin/nova && echo -e "${GREEN}[✓]${RESET} Updated" ;;
     banner)       nova_banner ;;
