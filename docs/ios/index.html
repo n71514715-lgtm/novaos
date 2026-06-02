@@ -165,7 +165,7 @@
   /    ║  ⊗  eye  (🔒)  ║    \
   \    ║  [✦ N ✦]  )))  ║    /
    '·  ╚════════════════╝  ·'</pre>
-  <h1>Nova<span>OS</span> for iOS</h1>
+  <h1>Vukov<span>OS</span> for iOS</h1>
   <p class="hero-sub">Privacy-first OS features. Right in Safari. No jailbreak needed.</p>
   <p class="motto">PRIVATA · LIBERA · SECURA</p>
 </div>
@@ -185,7 +185,7 @@
       <div class="chat-header-title">VukovBrain — Local AI</div>
     </div>
     <div class="chat-messages" id="chatMessages">
-      <div class="msg msg-nova">
+      <div class="msg msg-vukov">
         <div class="msg-bubble">Hello. I'm VukovBrain, the AI core of VukovOS. I run locally — nothing I process leaves your device. How can I help?</div>
         <div class="msg-time">VukovBrain</div>
       </div>
@@ -287,7 +287,7 @@
 </div>
 
 <script>
-const NOVA_SERVER = "http://localhost:11434";
+const VUKOV_SERVER = "http://localhost:11434";
 
 async function sendMessage() {
   const input = document.getElementById('chatInput');
@@ -295,9 +295,9 @@ async function sendMessage() {
   if (!text) return;
   input.value = '';
   addMessage(text, 'user');
-  addMessage('Thinking...', 'nova', true);
+  addMessage('Thinking...', 'vukov', true);
   try {
-    const response = await fetch(`${NOVA_SERVER}/completion`, {
+    const response = await fetch(`${VUKOV_SERVER}/completion`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
