@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NovaOS">
+<title>NovaOS — iOS Portal</title>
+<style>
+  :root {
+    --green: #00c896; --purple: #7c6aff; --red: #ff4466;
+    --orange: #ff8c00; --bg: #08080f; --surface: #0f0f1a;
+    --surface2: #141428; --text: #e0e0ff; --dim: #888899;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
+    min-height: 100vh; padding-bottom: 80px;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 1.25rem; padding-top: calc(1rem + env(safe-area-inset-top));
+    background: rgba(8,8,15,0.95); backdrop-filter: blur(20px);
+    border-bottom: 1px solid #00c89620; position: sticky; top: 0; z-index: 100;
+  }
+  .logo { font-family: monospace; color: var(--green); font-weight: 900; font-size: 1.1rem; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* HERO */
+  .hero { padding: 2rem 1.25rem; text-align: center; }
+  .hero-ascii {
+    font-family: monospace; font-size: 0.42rem; line-height: 1.2;
+    color: var(--green); white-space: pre; margin-bottom: 1.5rem;
+    text-shadow: 0 0 15px #00c89650;
+  }
+  .hero h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .hero h1 span { color: var(--green); }
+  .hero-sub { color: var(--dim); font-size: 0.88rem; margin-bottom: 1rem; }
+  .motto { color: var(--purple); font-family: monospace; font-size: 0.72rem; letter-spacing: 3px; }
+
+  /* ADD TO HOME */
+  .add-home-banner {
+    margin: 1rem 1.25rem;
+    background: linear-gradient(135deg, #00c89620, #7c6aff20);
+    border: 1px solid var(--green); border-radius: 12px; padding: 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .add-home-icon { font-size: 1.5rem; }
+  .add-home-text { flex: 1; }
+  .add-home-title { font-weight: 700; font-size: 0.88rem; color: var(--green); }
+  .add-home-desc { font-size: 0.75rem; color: var(--dim); margin-top: 2px; }
+
+  /* FEATURE CARDS */
+  .section { padding: 1.25rem; }
+  .section-title { font-size: 0.72rem; font-weight: 600; color: var(--dim); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.75rem; }
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .card {
+    background: var(--surface); border: 1px solid #00c89618;
+    border-radius: 14px; padding: 1rem; transition: all 0.15s;
+    cursor: pointer; active: scale(0.97);
+  }
+  .card:active { transform: scale(0.97); }
+  .card-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+  .card-title { font-weight: 700; font-size: 0.88rem; color: var(--text); }
+  .card-desc { font-size: 0.72rem; color: var(--dim); margin-top: 3px; }
+
+  /* NOVABRAIN CHAT */
+  .chat-section { padding: 1.25rem; }
+  .chat-box {
+    background: var(--surface); border: 1px solid #00c89630;
+    border-radius: 14px; overflow: hidden;
+  }
+  .chat-header {
+    padding: 0.75rem 1rem; background: var(--surface2);
+    border-bottom: 1px solid #00c89620; display: flex; align-items: center; gap: 0.5rem;
+  }
+  .chat-header-title { font-weight: 700; font-size: 0.88rem; color: var(--green); }
+  .chat-messages { padding: 1rem; min-height: 200px; max-height: 300px; overflow-y: auto; }
+  .msg { margin-bottom: 0.75rem; }
+  .msg-nova { text-align: left; }
+  .msg-user { text-align: right; }
+  .msg-bubble {
+    display: inline-block; padding: 0.6rem 0.9rem;
+    border-radius: 16px; font-size: 0.85rem; max-width: 85%;
+  }
+  .msg-nova .msg-bubble { background: var(--surface2); color: var(--text); border-bottom-left-radius: 4px; }
+  .msg-user .msg-bubble { background: var(--green); color: #000; border-bottom-right-radius: 4px; font-weight: 500; }
+  .msg-time { font-size: 0.65rem; color: var(--dim); margin-top: 3px; }
+  .chat-input-row {
+    display: flex; gap: 0.5rem; padding: 0.75rem;
+    border-top: 1px solid #00c89620;
+  }
+  .chat-input {
+    flex: 1; background: var(--bg); border: 1px solid #00c89640;
+    border-radius: 20px; padding: 0.6rem 1rem; color: var(--text);
+    font-size: 0.88rem; outline: none; -webkit-appearance: none;
+  }
+  .chat-send {
+    width: 36px; height: 36px; background: var(--green); color: #000;
+    border: none; border-radius: 50%; font-size: 1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; flex-shrink: 0;
+  }
+
+  /* QUICK ACTIONS */
+  .quick-actions { padding: 0 1.25rem 1.25rem; }
+  .action-btn {
+    width: 100%; padding: 0.9rem; margin-bottom: 0.6rem;
+    background: var(--surface); border: 1px solid #00c89620;
+    border-radius: 12px; color: var(--text); font-size: 0.88rem;
+    font-weight: 600; cursor: pointer; display: flex; align-items: center;
+    gap: 0.75rem; transition: all 0.15s; text-decoration: none;
+  }
+  .action-btn:active { transform: scale(0.98); background: var(--surface2); }
+  .action-icon { font-size: 1.1rem; width: 28px; text-align: center; }
+  .action-text { flex: 1; text-align: left; }
+  .action-arrow { color: var(--dim); }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(8,8,15,0.95); backdrop-filter: blur(20px);
+    border-top: 1px solid #00c89620; display: flex;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .nav-item {
+    flex: 1; padding: 0.75rem 0.5rem; text-align: center;
+    cursor: pointer; transition: color 0.2s; color: var(--dim);
+    font-size: 0.65rem; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .nav-item.active { color: var(--green); }
+  .nav-item-icon { font-size: 1.2rem; }
+
+  /* MODAL */
+  .modal { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.85); z-index: 200; align-items: flex-end; }
+  .modal.open { display: flex; }
+  .modal-sheet {
+    background: var(--surface); border-radius: 20px 20px 0 0;
+    padding: 1.5rem; width: 100%; max-height: 80vh; overflow-y: auto;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  }
+  .modal-handle { width: 40px; height: 4px; background: #444; border-radius: 2px; margin: 0 auto 1.25rem; }
+  .modal-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: var(--green); }
+  .modal-close { float: right; background: transparent; border: none; color: var(--dim); font-size: 1.2rem; cursor: pointer; }
+  .feature-list { list-style: none; }
+  .feature-list li { padding: 0.6rem 0; border-bottom: 1px solid #ffffff08; font-size: 0.88rem; color: var(--dim); display: flex; gap: 0.6rem; }
+  .feature-list li::before { content: '✓'; color: var(--green); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">⬡ NovaOS</div>
+  <div class="status-dot"></div>
+</div>
+
+<div class="hero">
+  <pre class="hero-ascii">    .·:++[ N O V A O S ]++:·.
+   ·'  ╔════════════════╗  '·
+  /    ║  ⊗  eye  (🔒)  ║    \
+  \    ║  [✦ N ✦]  )))  ║    /
+   '·  ╚════════════════╝  ·'</pre>
+  <h1>Nova<span>OS</span> for iOS</h1>
+  <p class="hero-sub">Privacy-first OS features. Right in Safari. No jailbreak needed.</p>
+  <p class="motto">PRIVATA · LIBERA · SECURA</p>
+</div>
+
+<div class="add-home-banner">
+  <div class="add-home-icon">📲</div>
+  <div class="add-home-text">
+    <div class="add-home-title">Add to Home Screen</div>
+    <div class="add-home-desc">Tap Share → Add to Home Screen for app-like experience</div>
+  </div>
+</div>
+
+<div class="chat-section">
+  <div class="chat-box">
+    <div class="chat-header">
+      <div class="status-dot"></div>
+      <div class="chat-header-title">NovaBrain — Local AI</div>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg msg-nova">
+        <div class="msg-bubble">Hello. I'm NovaBrain, the AI core of NovaOS. I run locally — nothing I process leaves your device. How can I help?</div>
+        <div class="msg-time">NovaBrain</div>
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" class="chat-input" id="chatInput" placeholder="Ask NovaBrain anything..." onkeydown="if(event.key==='Enter')sendMessage()"/>
+      <button class="chat-send" onclick="sendMessage()">↑</button>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Features</div>
+  <div class="card-grid">
+    <div class="card" onclick="showModal('encrypt')">
+      <div class="card-icon">🔐</div>
+      <div class="card-title">NovaCrypt</div>
+      <div class="card-desc">Encrypt files with ChaCha20</div>
+    </div>
+    <div class="card" onclick="showModal('vpn')">
+      <div class="card-icon">🛡️</div>
+      <div class="card-title">nova-vpn</div>
+      <div class="card-desc">WireGuard VPN setup</div>
+    </div>
+    <div class="card" onclick="showModal('identity')">
+      <div class="card-icon">🪪</div>
+      <div class="card-title">nova-id</div>
+      <div class="card-desc">Cryptographic identity</div>
+    </div>
+    <div class="card" onclick="showModal('memory')">
+      <div class="card-icon">🧠</div>
+      <div class="card-title">nova-memory</div>
+      <div class="card-desc">Personal memory engine</div>
+    </div>
+    <div class="card" onclick="showModal('chat')">
+      <div class="card-icon">💬</div>
+      <div class="card-title">nova-chat</div>
+      <div class="card-desc">P2P encrypted messages</div>
+    </div>
+    <div class="card" onclick="window.location.href='../gaming/'">
+      <div class="card-icon">🎮</div>
+      <div class="card-title">Gaming</div>
+      <div class="card-desc">Cloud gaming portal</div>
+    </div>
+  </div>
+</div>
+
+<div class="quick-actions">
+  <div class="section-title">Quick Actions</div>
+  <a href="https://github.com/n71514715-lgtm/novaos" class="action-btn">
+    <span class="action-icon">⬡</span>
+    <span class="action-text">View NovaOS on GitHub</span>
+    <span class="action-arrow">›</span>
+  </a>
+  <a href="../gaming/stream.html" class="action-btn">
+    <span class="action-icon">⚡</span>
+    <span class="action-text">Launch Gaming Session</span>
+    <span class="action-arrow">›</span>
+  </a>
+  <a href="../" class="action-btn">
+    <span class="action-icon">🌐</span>
+    <span class="action-text">NovaOS Main Site</span>
+    <span class="action-arrow">›</span>
+  </a>
+  <div class="action-btn" onclick="copyInstall()">
+    <span class="action-icon">📋</span>
+    <span class="action-text">Copy Termux Install Command</span>
+    <span class="action-arrow" id="copyArrow">›</span>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <div class="nav-item active" onclick="showTab('home')">
+    <div class="nav-item-icon">⬡</div>
+    Home
+  </div>
+  <div class="nav-item" onclick="showTab('brain')">
+    <div class="nav-item-icon">🧠</div>
+    Brain
+  </div>
+  <div class="nav-item" onclick="window.location.href='../gaming/'">
+    <div class="nav-item-icon">🎮</div>
+    Gaming
+  </div>
+  <div class="nav-item" onclick="showTab('privacy')">
+    <div class="nav-item-icon">🔐</div>
+    Privacy
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal" onclick="closeModal()">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modalTitle">Feature</div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+const NOVA_SERVER = "http://localhost:11434";
+
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  addMessage(text, 'user');
+  addMessage('Thinking...', 'nova', true);
+  try {
+    const response = await fetch(`${NOVA_SERVER}/completion`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        prompt: `<|system|>You are NovaBrain, AI core of NovaOS. Be concise, 2-3 sentences.<|end|><|user|>${text}<|end|><|assistant|>`,
+        n_predict: 150, temperature: 0.7
+      })
+    });
+    const data = await response.json();
+    updateLastMessage(data.content || "NovaBrain server not running. Start with: nova brain-start");
+  } catch(e) {
+    updateLastMessage("NovaBrain is offline. On your NovaOS device, run: nova brain-start — then connect to the same network.");
+  }
+}
+
+function addMessage(text, sender, loading=false) {
+  const area = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = `msg msg-${sender}`;
+  div.id = loading ? 'loadingMsg' : '';
+  div.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-time">${sender === 'user' ? 'You' : 'NovaBrain'}</div>`;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function updateLastMessage(text) {
+  const loading = document.getElementById('loadingMsg');
+  if (loading) {
+    loading.querySelector('.msg-bubble').textContent = text;
+    loading.id = '';
+  }
+}
+
+const modals = {
+  encrypt: {
+    title: '🔐 NovaCrypt',
+    content: `<p style="color:var(--dim);font-size:0.88rem;margin-bottom:1rem">ChaCha20-Poly1305 + AES-256 + Argon2id. Stronger than Telegram.</p>
+    <ul class="feature-list">
+      <li>Encrypt any file with one command</li>
+      <li>512-bit keyfile generation</li>
+      <li>Memory-hard Argon2id key derivation</li>
+      <li>Secure delete — overwrite before wipe</li>
+    </ul>
+    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">nova encrypt secret.txt</div>`
+  },
+  vpn: {
+    title: '🛡️ nova-vpn',
+    content: `<p style="color:var(--dim);font-size:0.88rem;margin-bottom:1rem">WireGuard — the fastest, most modern VPN protocol.</p>
+    <ul class="feature-list">
+      <li>Generate keypair in one command</li>
+      <li>ChaCha20 encrypted tunnel</li>
+      <li>Zero logs policy</li>
+      <li>Works over any network</li>
+    </ul>
+    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">nova vpn genkeys</div>`
+  },
+  identity: {
+    title: '🪪 nova-id',
+    content: `<p style="color:var(--dim);font-size:0.88rem;margin-bottom:1rem">Ed25519 cryptographic identity. Same algorithm as Signal and SSH.</p>
+    <ul class="feature-list">
+      <li>Unique fingerprint per device</li>
+      <li>Sign files and messages</li>
+      <li>Verify authenticity of anything</li>
+      <li>No central authority needed</li>
+    </ul>
+    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">nova id generate "Name"</div>`
+  },
+  memory: {
+    title: '🧠 nova-memory',
+    content: `<p style="color:var(--dim);font-size:0.88rem;margin-bottom:1rem">Personal memory engine. What Microsoft Recall should have been.</p>
+    <ul class="feature-list">
+      <li>Store anything you want to remember</li>
+      <li>AI-powered recall — ask in natural language</li>
+      <li>SQLite + FTS5 — fast local search</li>
+      <li>Zero cloud. Zero surveillance.</li>
+    </ul>
+    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">nova memory recall "topic"</div>`
+  },
+  chat: {
+    title: '💬 nova-chat',
+    content: `<p style="color:var(--dim);font-size:0.88rem;margin-bottom:1rem">Encrypted P2P messaging. No server. No account. No phone number.</p>
+    <ul class="feature-list">
+      <li>Direct device-to-device</li>
+      <li>Sender identity via nova-id</li>
+      <li>Works over LAN or WireGuard</li>
+      <li>Message history stored locally</li>
+    </ul>
+    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">nova chat send 192.168.1.x "msg"</div>`
+  }
+};
+
+function showModal(type) {
+  const m = modals[type];
+  if (!m) return;
+  document.getElementById('modalTitle').textContent = m.title;
+  document.getElementById('modalContent').innerHTML = m.content;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+function copyInstall() {
+  const cmd = 'curl -sL https://raw.githubusercontent.com/n71514715-lgtm/novaos/main/termux/nova-quick-install.sh | bash';
+  navigator.clipboard.writeText(cmd).then(() => {
+    document.getElementById('copyArrow').textContent = '✓';
+    setTimeout(() => document.getElementById('copyArrow').textContent = '›', 2000);
+  });
+}
+
+function showTab(tab) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>
