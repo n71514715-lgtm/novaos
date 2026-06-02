@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NovaOS Gaming — Live Stream</title>
+<title>VukovOS Gaming — Live Stream</title>
 <style>
   :root {
     --green: #00c896;
@@ -277,7 +277,7 @@
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="topbar-left">
-    <div class="logo">⬡ NovaOS Gaming</div>
+    <div class="logo">⬡ VukovOS Gaming</div>
     <div class="session-info" id="sessionInfo">No active session</div>
   </div>
   <div class="topbar-right">
@@ -302,7 +302,7 @@
     <!-- CONNECT OVERLAY -->
     <div class="stream-overlay" id="connectOverlay">
       <pre class="overlay-logo">
-    .·:++[ N O V A O S ]++:·.
+    .·:++[ V U K O V O S ]++:·.
    ·'  ╔════════════════╗  '·
   /    ║  ⊗  eye  (🔒)  ║    \
   \    ║  [✦ N ✦]  )))  ║    /
@@ -314,7 +314,7 @@
         Credentials cleared after auth. Zero logs.
       </div>
       <div class="connect-form">
-        <input type="text" id="serverIP" placeholder="Server IP (from nova gaming stream)" value=""/>
+        <input type="text" id="serverIP" placeholder="Server IP (from vukov gaming stream)" value=""/>
         <input type="text" id="gameUsername" placeholder="Platform username / email" autocomplete="off"/>
         <input type="password" id="gamePassword" placeholder="Platform password" autocomplete="off"/>
         <select id="gamePlatform" style="background:#0f0f1a; border:1px solid #00c89640; border-radius:8px; padding:0.7rem 1rem; color:#e0e0ff; font-family:monospace; font-size:0.85rem; outline:none;">
@@ -333,7 +333,7 @@
     <div class="stream-overlay hidden" id="loadingOverlay">
       <div style="font-size:2rem; margin-bottom:1rem;">⚡</div>
       <div class="overlay-title" id="loadingTitle">Connecting...</div>
-      <div class="overlay-sub" id="loadingText">Establishing secure connection to NovaOS gaming server</div>
+      <div class="overlay-sub" id="loadingText">Establishing secure connection to VukovOS gaming server</div>
       <div style="margin-top:1.5rem; width:200px; height:3px; background:#1a1a2e; border-radius:2px; overflow:hidden;">
         <div id="progressBar" style="height:100%; width:0%; background:var(--green); transition:width 0.3s; border-radius:2px;"></div>
       </div>
@@ -406,7 +406,7 @@
     <!-- CHAT -->
     <div class="sidebar-title" style="padding:0.75rem 0.75rem 0.25rem;">Session Chat</div>
     <div class="chat-area" id="chatArea">
-      <div class="chat-msg"><span class="msg-system">⬡ NovaOS Gaming session ready</span></div>
+      <div class="chat-msg"><span class="msg-system">⬡ VukovOS Gaming session ready</span></div>
       <div class="chat-msg"><span class="msg-system">Connect to start playing</span></div>
     </div>
     <div class="chat-input-area">
@@ -458,7 +458,7 @@ function startSession() {
   document.getElementById('loadingOverlay').classList.remove('hidden');
 
   const steps = [
-    [10, 'Connecting to NovaOS gaming server...'],
+    [10, 'Connecting to VukovOS gaming server...'],
     [25, 'Establishing encrypted tunnel...'],
     [40, `Authenticating ${platform.toUpperCase()} account...`],
     [60, 'Clearing credentials from memory...'],
@@ -505,7 +505,7 @@ function sessionConnected(platform, ip) {
   ctx.fillStyle = '#00c896';
   ctx.font = 'bold 24px monospace';
   ctx.textAlign = 'center';
-  ctx.fillText('⬡ NovaOS Gaming', canvas.width/2, canvas.height/2 - 40);
+  ctx.fillText('⬡ VukovOS Gaming', canvas.width/2, canvas.height/2 - 40);
   ctx.fillStyle = '#888899';
   ctx.font = '16px monospace';
   ctx.fillText(`${platform.toUpperCase()} session connected`, canvas.width/2, canvas.height/2);

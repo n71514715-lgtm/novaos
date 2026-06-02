@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="NovaOS">
-<title>NovaOS — iOS Portal</title>
+<meta name="apple-mobile-web-app-title" content="VukovOS">
+<title>VukovOS — iOS Portal</title>
 <style>
   :root {
     --green: #00c896; --purple: #7c6aff; --red: #ff4466;
@@ -82,13 +82,13 @@
   .chat-header-title { font-weight: 700; font-size: 0.88rem; color: var(--green); }
   .chat-messages { padding: 1rem; min-height: 200px; max-height: 300px; overflow-y: auto; }
   .msg { margin-bottom: 0.75rem; }
-  .msg-nova { text-align: left; }
+  .msg-vukov { text-align: left; }
   .msg-user { text-align: right; }
   .msg-bubble {
     display: inline-block; padding: 0.6rem 0.9rem;
     border-radius: 16px; font-size: 0.85rem; max-width: 85%;
   }
-  .msg-nova .msg-bubble { background: var(--surface2); color: var(--text); border-bottom-left-radius: 4px; }
+  .msg-vukov .msg-bubble { background: var(--surface2); color: var(--text); border-bottom-left-radius: 4px; }
   .msg-user .msg-bubble { background: var(--green); color: #000; border-bottom-right-radius: 4px; font-weight: 500; }
   .msg-time { font-size: 0.65rem; color: var(--dim); margin-top: 3px; }
   .chat-input-row {
@@ -155,12 +155,12 @@
 <body>
 
 <div class="topbar">
-  <div class="logo">⬡ NovaOS</div>
+  <div class="logo">⬡ VukovOS</div>
   <div class="status-dot"></div>
 </div>
 
 <div class="hero">
-  <pre class="hero-ascii">    .·:++[ N O V A O S ]++:·.
+  <pre class="hero-ascii">    .·:++[ V U K O V O S ]++:·.
    ·'  ╔════════════════╗  '·
   /    ║  ⊗  eye  (🔒)  ║    \
   \    ║  [✦ N ✦]  )))  ║    /
@@ -182,16 +182,16 @@
   <div class="chat-box">
     <div class="chat-header">
       <div class="status-dot"></div>
-      <div class="chat-header-title">NovaBrain — Local AI</div>
+      <div class="chat-header-title">VukovBrain — Local AI</div>
     </div>
     <div class="chat-messages" id="chatMessages">
       <div class="msg msg-nova">
-        <div class="msg-bubble">Hello. I'm NovaBrain, the AI core of NovaOS. I run locally — nothing I process leaves your device. How can I help?</div>
-        <div class="msg-time">NovaBrain</div>
+        <div class="msg-bubble">Hello. I'm VukovBrain, the AI core of VukovOS. I run locally — nothing I process leaves your device. How can I help?</div>
+        <div class="msg-time">VukovBrain</div>
       </div>
     </div>
     <div class="chat-input-row">
-      <input type="text" class="chat-input" id="chatInput" placeholder="Ask NovaBrain anything..." onkeydown="if(event.key==='Enter')sendMessage()"/>
+      <input type="text" class="chat-input" id="chatInput" placeholder="Ask VukovBrain anything..." onkeydown="if(event.key==='Enter')sendMessage()"/>
       <button class="chat-send" onclick="sendMessage()">↑</button>
     </div>
   </div>
@@ -202,27 +202,27 @@
   <div class="card-grid">
     <div class="card" onclick="showModal('encrypt')">
       <div class="card-icon">🔐</div>
-      <div class="card-title">NovaCrypt</div>
+      <div class="card-title">VukovCrypt</div>
       <div class="card-desc">Encrypt files with ChaCha20</div>
     </div>
     <div class="card" onclick="showModal('vpn')">
       <div class="card-icon">🛡️</div>
-      <div class="card-title">nova-vpn</div>
+      <div class="card-title">vukov-vpn</div>
       <div class="card-desc">WireGuard VPN setup</div>
     </div>
     <div class="card" onclick="showModal('identity')">
       <div class="card-icon">🪪</div>
-      <div class="card-title">nova-id</div>
+      <div class="card-title">vukov-id</div>
       <div class="card-desc">Cryptographic identity</div>
     </div>
     <div class="card" onclick="showModal('memory')">
       <div class="card-icon">🧠</div>
-      <div class="card-title">nova-memory</div>
+      <div class="card-title">vukov-memory</div>
       <div class="card-desc">Personal memory engine</div>
     </div>
     <div class="card" onclick="showModal('chat')">
       <div class="card-icon">💬</div>
-      <div class="card-title">nova-chat</div>
+      <div class="card-title">vukov-chat</div>
       <div class="card-desc">P2P encrypted messages</div>
     </div>
     <div class="card" onclick="window.location.href='../gaming/'">
@@ -235,9 +235,9 @@
 
 <div class="quick-actions">
   <div class="section-title">Quick Actions</div>
-  <a href="https://github.com/n71514715-lgtm/novaos" class="action-btn">
+  <a href="https://github.com/n71514715-lgtm/vukovos" class="action-btn">
     <span class="action-icon">⬡</span>
-    <span class="action-text">View NovaOS on GitHub</span>
+    <span class="action-text">View VukovOS on GitHub</span>
     <span class="action-arrow">›</span>
   </a>
   <a href="../gaming/stream.html" class="action-btn">
@@ -247,7 +247,7 @@
   </a>
   <a href="../" class="action-btn">
     <span class="action-icon">🌐</span>
-    <span class="action-text">NovaOS Main Site</span>
+    <span class="action-text">VukovOS Main Site</span>
     <span class="action-arrow">›</span>
   </a>
   <div class="action-btn" onclick="copyInstall()">
@@ -301,14 +301,14 @@ async function sendMessage() {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        prompt: `<|system|>You are NovaBrain, AI core of NovaOS. Be concise, 2-3 sentences.<|end|><|user|>${text}<|end|><|assistant|>`,
+        prompt: `<|system|>You are VukovBrain, AI core of VukovOS. Be concise, 2-3 sentences.<|end|><|user|>${text}<|end|><|assistant|>`,
         n_predict: 150, temperature: 0.7
       })
     });
     const data = await response.json();
-    updateLastMessage(data.content || "NovaBrain server not running. Start with: nova brain-start");
+    updateLastMessage(data.content || "VukovBrain server not running. Start with: vukov brain-start");
   } catch(e) {
-    updateLastMessage("NovaBrain is offline. On your NovaOS device, run: nova brain-start — then connect to the same network.");
+    updateLastMessage("VukovBrain is offline. On your VukovOS device, run: vukov brain-start — then connect to the same network.");
   }
 }
 
@@ -317,7 +317,7 @@ function addMessage(text, sender, loading=false) {
   const div = document.createElement('div');
   div.className = `msg msg-${sender}`;
   div.id = loading ? 'loadingMsg' : '';
-  div.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-time">${sender === 'user' ? 'You' : 'NovaBrain'}</div>`;
+  div.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-time">${sender === 'user' ? 'You' : 'VukovBrain'}</div>`;
   area.appendChild(div);
   area.scrollTop = area.scrollHeight;
 }
@@ -332,7 +332,7 @@ function updateLastMessage(text) {
 
 const modals = {
   encrypt: {
-    title: '🔐 NovaCrypt',
+    title: '🔐 VukovCrypt',
     content: `<p style="color:var(--dim);font-size:0.88rem;margin-bottom:1rem">ChaCha20-Poly1305 + AES-256 + Argon2id. Stronger than Telegram.</p>
     <ul class="feature-list">
       <li>Encrypt any file with one command</li>
@@ -340,10 +340,10 @@ const modals = {
       <li>Memory-hard Argon2id key derivation</li>
       <li>Secure delete — overwrite before wipe</li>
     </ul>
-    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">nova encrypt secret.txt</div>`
+    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">vukov encrypt secret.txt</div>`
   },
   vpn: {
-    title: '🛡️ nova-vpn',
+    title: '🛡️ vukov-vpn',
     content: `<p style="color:var(--dim);font-size:0.88rem;margin-bottom:1rem">WireGuard — the fastest, most modern VPN protocol.</p>
     <ul class="feature-list">
       <li>Generate keypair in one command</li>
@@ -351,10 +351,10 @@ const modals = {
       <li>Zero logs policy</li>
       <li>Works over any network</li>
     </ul>
-    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">nova vpn genkeys</div>`
+    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">vukov vpn genkeys</div>`
   },
   identity: {
-    title: '🪪 nova-id',
+    title: '🪪 vukov-id',
     content: `<p style="color:var(--dim);font-size:0.88rem;margin-bottom:1rem">Ed25519 cryptographic identity. Same algorithm as Signal and SSH.</p>
     <ul class="feature-list">
       <li>Unique fingerprint per device</li>
@@ -362,10 +362,10 @@ const modals = {
       <li>Verify authenticity of anything</li>
       <li>No central authority needed</li>
     </ul>
-    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">nova id generate "Name"</div>`
+    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">vukov id generate "Name"</div>`
   },
   memory: {
-    title: '🧠 nova-memory',
+    title: '🧠 vukov-memory',
     content: `<p style="color:var(--dim);font-size:0.88rem;margin-bottom:1rem">Personal memory engine. What Microsoft Recall should have been.</p>
     <ul class="feature-list">
       <li>Store anything you want to remember</li>
@@ -373,18 +373,18 @@ const modals = {
       <li>SQLite + FTS5 — fast local search</li>
       <li>Zero cloud. Zero surveillance.</li>
     </ul>
-    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">nova memory recall "topic"</div>`
+    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">vukov memory recall "topic"</div>`
   },
   chat: {
-    title: '💬 nova-chat',
+    title: '💬 vukov-chat',
     content: `<p style="color:var(--dim);font-size:0.88rem;margin-bottom:1rem">Encrypted P2P messaging. No server. No account. No phone number.</p>
     <ul class="feature-list">
       <li>Direct device-to-device</li>
-      <li>Sender identity via nova-id</li>
+      <li>Sender identity via vukov-id</li>
       <li>Works over LAN or WireGuard</li>
       <li>Message history stored locally</li>
     </ul>
-    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">nova chat send 192.168.1.x "msg"</div>`
+    <div style="margin-top:1rem;background:var(--bg);border-radius:8px;padding:0.75rem;font-family:monospace;font-size:0.78rem;color:var(--green)">vukov chat send 192.168.1.x "msg"</div>`
   }
 };
 
@@ -401,7 +401,7 @@ function closeModal() {
 }
 
 function copyInstall() {
-  const cmd = 'curl -sL https://raw.githubusercontent.com/n71514715-lgtm/novaos/main/termux/nova-quick-install.sh | bash';
+  const cmd = 'curl -sL https://raw.githubusercontent.com/n71514715-lgtm/vukovos/main/termux/vukov-quick-install.sh | bash';
   navigator.clipboard.writeText(cmd).then(() => {
     document.getElementById('copyArrow').textContent = '✓';
     setTimeout(() => document.getElementById('copyArrow').textContent = '›', 2000);
