@@ -1,147 +1,123 @@
-# NovaOS
-A privacy-first, encrypted, AI-native operating system.
-Runs on bare metal, WSL2, and Android via Termux (rootless).
-No telemetry. No cloud. No surveillance.
-Encryption: LUKS2 + AES-256 + ChaCha20 (stronger than Telegram)
-AI: Local llama.cpp + Phi-3 Mini (never leaves your device)
-Built on Arch Linux ARM + proot (rootless Android support)
+# 🐺 VukovOS
 
-## Build Log
-### Milestone 1 — First Boot ✓
-- Date: 2026-05-30
-- NovaOS 0.1 (Spectre) aarch64 boots successfully
-- Running inside WSL2 via arch-chroot + QEMU translation
-- Core packages: cryptsetup 2.8.6, WireGuard, Python 3.14.5, Git 2.54.0
-- 180 packages installed via pacman
-- Next: Encryption layer (LUKS2 + AES-256 + ChaCha20)
+> *PRIVATA · LIBERA · SECURA*
 
-### Milestone 2 — NovaCrypt Encryption Engine ✓
-- ChaCha20-Poly1305 file encryption working
-- AES-256-XTS disk cipher configured
-- Argon2id key derivation (memory-hard, bruteforce resistant)
-- 512-bit keyfile generation working
-- Encrypt/decrypt/secure-delete all functional
-- Next: NovaBrain local AI daemon
+**VukovOS** is a privacy-first, AI-native operating system built from scratch for people who believe surveillance is theft and that technology should serve its user — not the other way around.
 
-### Milestone 3 — NovaBrain AI Daemon ✓
-- llama.cpp compiled natively on Ryzen 7 5700U
-- Phi-3 Mini 3.8B model running at 3.1 tokens/sec
-- Zero cloud, zero telemetry, fully local
-- First words: "I am NovaBrain, the AI core of NovaOS"
-- Use llama-completion for single-shot queries
-- Next: Termux Android bootstrap
+Named after **Vuk** (вук) — wolf in Serbian — and in the spirit of Vuk Stefanović Karadžić, who fought to give ordinary people a language they could actually use. VukovOS fights to give ordinary people an OS they actually control.
 
-### Milestone 4 — Termux Android Bootstrap ✓
-- nova-termux-install.sh — full guided installer
-- nova-quick-install.sh — one-command install
-- nova command with: start, update, status, brain, encrypt
-- privacy.conf — telemetry disabled by default
-- novaos-0.1-alpha.zip — distributable package
-- Next: Test on Samsung Remote Test Lab
+---
 
-### Milestone 5 — Termux Installer Validated ✓
-- Termux detection working correctly
-- Android SDK version check working (requires 7.0+)
-- Installer logic validated via mock environment
-- Ready for real Termux deployment
-- Next: GitHub release + real device test
+## Current Release: v0.1-alpha "Spectre"
 
-### Milestone 6 — Desktop Shell ✓
-- XFCE4 desktop running via WSLg X11 forwarding
-- NovaOS identity showing in fastfetch
-- GUI window rendering on Windows desktop
-- AMD Ryzen 7 5700U + Radeon iGPU detected
-- Next: NovaOS logo + custom theming
+| Component | Status |
+|---|---|
+| Base (Arch Linux ARM / aarch64) | ✅ Live |
+| VukovCrypt (ChaCha20-Poly1305 + AES-256-XTS + Argon2id) | ✅ Live |
+| VukovBrain (llama.cpp + Phi-3 Mini 3.8B, local AI) | ✅ Live |
+| vukov-guard (encryption watchdog) | ✅ Live |
+| vukov-vpn (WireGuard) | ✅ Live |
+| vukov-id (Ed25519 identity) | ✅ Live |
+| vukov-vault (encrypted password manager) | ✅ Live |
+| vukov-chat (P2P messaging, port 51869) | ✅ Live |
+| vukov-sync (P2P file sync, port 51870) | ✅ Live |
+| vukov-gaming (Steam / Epic / GOG / EA / Ubisoft) | ✅ Live |
+| Desktop (XFCE via WSLg + Wine 10.0) | ✅ Live |
+| Android (Termux bootstrap) | ✅ Live |
 
-### Milestone 7 — Windows App Support ✓
-- Wine 10.0 installed
-- Windows apps run natively on NovaOS
-- Notepad confirmed working via WSLg
-- Next: Darling (macOS), nova-guard, WireGuard, boot splash
+---
 
-### Milestone 8 — nova-guard Real-time Encryption Watchdog ✓
-- Monitors directories for new files in real-time
-- Auto-encrypts files the moment they're created
-- Original file deleted — only encrypted .nova version survives
-- No other OS ships with this built in
-- Next: WireGuard VPN + boot experience
+## Philosophy
 
-### Milestone 9 — Boot Experience ✓
-- Coat of arms renders on every terminal open
-- Typewriter animation — "Private. Encrypted. Yours."
-- Real-time system checks: NovaCrypt, NovaBrain, nova-guard, nova-vpn
-- NovaBrain greeting with time of day
-- Auto-runs via .bashrc on every session
-- Next: Darling macOS layer + demo video
+Most operating systems are built for convenience. VukovOS is built for **sovereignty**.
 
-### Milestone 10 — Identity + Vault ✓
-- nova-id: Ed25519 cryptographic identity (same as Signal/SSH)
-- Sign and verify files with your NovaOS key
-- Fingerprint: unique per device, cryptographically generated
-- nova-vault: encrypted password manager
-- AES-256 + PBKDF2 (600,000 iterations)
-- Zero cloud, zero sync, zero breach risk
-- Next: nova-chat encrypted messaging + nova-sync
+- **No telemetry.** Nothing leaves your machine unless you choose.
+- **Local AI first.** VukovBrain runs entirely on-device. No cloud, no API keys, no logs.
+- **Encrypted by default.** VukovCrypt wraps your data before it ever touches disk.
+- **P2P native.** vukov-chat and vukov-sync work without central servers.
+- **Built for the underserved.** Designed with users in mind who live under surveillance-heavy regimes and have limited access to privacy tools.
 
-### Milestone 11 — nova-chat Encrypted P2P Messaging ✓
-- Direct device-to-device messaging
-- No server, no account, no phone number
-- Message delivered and displayed with timestamp
-- Sender identity via nova-id fingerprint
-- Port 51869 — works over LAN or WireGuard tunnel
-- Next: nova-sync encrypted file sync
+---
 
-### Milestone 12 — nova-sync Encrypted P2P File Sync ✓
-- Direct device-to-device file sync
-- No Dropbox, no Google Drive, no iCloud
-- 3 files synced successfully in live test
-- Hash verification — only changed files sync
-- Works over LAN or WireGuard tunnel
-- Next: Darling macOS layer + demo video
+## Quick Start
 
-### Milestone 13 — nova-gaming Cloud Gaming Layer ✓
-- Steam, Epic, GOG, EA, Ubisoft — all platforms supported
-- Runs inside any cloud GPU session (GFN, Shadow, Boosteroid)
-- Anti-mining watchdog — auto-bans miners instantly
-- Session wipe — credentials deleted after auth
-- Sunshine streaming server integration
-- Zero logs, zero trace, zero licensing BS
-- Web portal: novaos gaming page live
-- Next: WebRTC browser streaming + Sunshine setup
+```bash
+# Boot into VukovOS environment
+vukov-boot
 
-### Milestone 14 — nova-memory Personal Memory Engine ✓
-- Stores anything you want to remember locally
-- Full-text search across all memories
-- NovaBrain answers questions about your memories
-- SQLite + FTS5 — fast, encrypted, local
-- Types: note, idea, link, quote, meeting, code, dream
-- What Microsoft Recall should have been
-- Zero cloud, zero surveillance, zero leaks
-- Next: Tor routing + graphical installer
+# Check system status
+vukov status
 
-### Milestone 15 — nova-tor Anonymity Layer ✓
-- Tor daemon starts with one command
-- Real IP hidden — verified working
-- torsocks routes any command through Tor
-- New identity on demand
-- nova tor ip — compare real vs Tor IP
-- Beats Tails on ease of use
-- Next: nova-setup wizard + graphical installer
+# Start local AI
+vukov-brain start
 
-### Milestone 16 — nova-setup First Run Wizard ✓
-- 6-step guided setup for any new user
-- Detects existing identity, vault, NovaBrain
-- Configures Tor, nova-guard, nova-memory
-- No terminal knowledge needed
-- Works for users in Tehran, Dhaka, Belgrade, anywhere
-- Beautiful summary screen at completion
-- Next: graphical installer + demo video
+# Encrypt a file
+vukov-crypt encrypt myfile.txt
 
-### Milestone 17 — Security Suite ✓
-- nova-shield: real-time network monitor, detects suspicious connections
-- nova-panic: 4-level emergency wipe (session/credentials/identity/full)
-- nova-p2p-web: Tor hidden service — host .onion sites from your device
-- nova-audit: full security audit — processes, ports, files, integrity
-- nova-ai-train: fine-tune NovaBrain on your own documents locally
-- All integrated into nova command
-- Next: graphical installer + demo video
+# Connect VPN
+vukov-vpn up
+
+# Open encrypted vault
+vukov-vault open
+```
+
+---
+
+## Architecture
+
+```
+VukovOS
+├── Base: Arch Linux ARM (aarch64, QEMU-translated in WSL2)
+├── Crypto: VukovCrypt
+│   ├── ChaCha20-Poly1305 (stream encryption)
+│   ├── AES-256-XTS (disk encryption)
+│   └── Argon2id (key derivation)
+├── AI: VukovBrain
+│   ├── llama.cpp backend
+│   ├── Phi-3 Mini 3.8B model
+│   └── llama-server (persistent, port 11434)
+├── Network: vukov-vpn (WireGuard)
+├── Identity: vukov-id (Ed25519)
+├── Comms: vukov-chat (P2P, port 51869)
+├── Sync: vukov-sync (P2P, port 51870)
+├── Desktop: XFCE + WSLg + Wine 10.0
+└── Gaming: Steam, Epic, GOG, EA, Ubisoft
+```
+
+---
+
+## Hardware Reference Build
+
+Tested and developed on:
+- **Device:** Acer Aspire (Ryzen 7 5700U, integrated Radeon)
+- **Host:** Windows 11 + WSL2 (Ubuntu)
+- **Storage:** D:\WSL + D:\VukovOS
+- **AI speed:** ~3 tokens/second (CPU only)
+
+---
+
+## Roadmap
+
+- [ ] v0.2 — vukov-shield (network intrusion detection)
+- [ ] v0.2 — improved VukovBrain context persistence
+- [ ] v0.3 — vukov-mesh (multi-node encrypted network)
+- [ ] v0.3 — native ARM image (no QEMU layer)
+- [ ] v1.0 — full installable ISO
+
+---
+
+## Contributing
+
+VukovOS is built for people who need it most. If you're from a region where privacy tools are scarce or restricted, you're exactly who this is for.
+
+PRs welcome. Issues welcome. Forks welcome.
+
+---
+
+## License
+
+MIT
+
+---
+
+*PRIVATA · LIBERA · SECURA* 🐺
