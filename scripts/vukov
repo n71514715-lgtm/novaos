@@ -1,0 +1,110 @@
+#!/bin/bash
+VERSION="0.2-alpha"
+VUKOV_ROOT="/mnt/d/VukovOS"
+CRYPT="$VUKOV_ROOT/encryption/vukov-crypt.sh"
+LLAMA_SERVER="/opt/vukovbrain/llama.cpp/build/bin/llama-server"
+MODEL="/opt/vukovbrain/models/phi3-mini.gguf"
+SCRIPTS="/usr/local/bin"
+GREEN='\033[0;32m'; CYAN='\033[0;36m'; RED='\033[0;31m'
+PURPLE='\033[0;35m'; YELLOW='\033[0;33m'; BOLD='\033[1m'; DIM='\033[2m'; RESET='\033[0m'
+
+vukov_banner() {
+echo -e "${GREEN}"
+cat << 'BANNER'
+        .·:+++++++++++++++++++:·.
+      ·'  ╔══════════════════╗  '·
+    ·'    ║  \   ·|·   /    ║  '·
+   /      ║   \  ·V·  /     ║    \
+  |    ✦  ╠────[✦ V ✦]────╣  ✦   |
+  |       ║  /  ·|·   \    ║      |
+  |  ·····╬··················╬·····|
+  |  ✦    ║  ⊗─────────))) ║   ✦  |
+  |       ║  ⊗  eye  (🔒) ║       |
+  |  ·····╬··················╬·····|
+  |       ║   circuit  [V]   ║      |
+   \      ╚══════════════════╝     /
+    '·       PRIVATA · LIBERA     ·'
+      '·         SECURA          ·'
+        '·:+[ V U K O V O S ]+:·'
+             0.2  ·  VOLK
+BANNER
+echo -e "${RESET}"
+}
+
+vukov_status() {
+    echo -e "${GREEN}${BOLD}"
+    echo "  ╔══════════════════════════════════════════════╗"
+    echo "  ║        VukovOS v${VERSION} Dashboard              ║"
+    echo "  ╚══════════════════════════════════════════════╝"
+    echo -e "${RESET}"
+    BRAIN=$(curl -s http://localhost:11434/health 2>/dev/null | grep -q "ok" && echo "${GREEN}🟢 online${RESET}" || echo "${RED}⚫ offline${RESET}")
+    VPN=$(wg show 2>/dev/null | grep -q "interface" && echo "${GREEN}🟢 active${RESET}" || echo "${RED}⚫ inactive${RESET}")
+    TOR=$(pgrep tor > /dev/null 2>&1 && echo "${GREEN}🟢 running${RESET}" || echo "${RED}⚫ stopped${RESET}")
+    GUARD=$(pgrep -f vukov-guard > /dev/null 2>&1 && echo "${GREEN}🟢 watching${RESET}" || echo "${RED}⚫ stopped${RESET}")
+    SHIELD=$(pgrep -f vukov-shield > /dev/null 2>&1 && echo "${GREEN}🟢 monitoring${RESET}" || echo "${RED}⚫ stopped${RESET}")
+    WATCH=$(pgrep -f vukov-watch > /dev/null 2>&1 && echo "${GREEN}🟢 active${RESET}" || echo "${RED}⚫ stopped${RESET}")
+    MACOS=$(command -v darling > /dev/null 2>&1 && echo "${GREEN}🟢 installed${RESET}" || echo "${YELLOW}⚠ not installed${RESET}")
+    DISK=$(df -h / | awk 'NR==2{print $3"/"$2" ("$5" used)"}')
+    MEM=$(free -h | awk 'NR==2{print $3"/"$2}')
+    IP=$(hostname -I | awk '{print $1}')
+    UP=$(uptime -p 2>/dev/null || echo "unknown")
+    echo -e "  ${CYAN}VukovBrain${RESET}     $BRAIN"
+    echo -e "  ${CYAN}vukov-vpn${RESET}      $VPN"
+    echo -e "  ${CYAN}vukov-tor${RESET}      $TOR"
+    echo -e "  ${CYAN}vukov-guard${RESET}    $GUARD"
+    echo -e "  ${CYAN}vukov-shield${RESET}   $SHIELD"
+    echo -e "  ${CYAN}vukov-watch${RESET}    $WATCH"
+    echo -e "  ${CYAN}vukov-macos${RESET}    $MACOS"
+    echo -e "  ${CYAN}disk${RESET}           $DISK"
+    echo -e "  ${CYAN}memory${RESET}         $MEM"
+    echo -e "  ${CYAN}local ip${RESET}       $IP"
+    echo -e "  ${CYAN}uptime${RESET}         $UP"
+    echo ""
+    echo -e "  ${DIM}PRIVATA · LIBERA · SECURA 🐺${RESET}"
+}
+
+vukov_help() {
+    echo -e "${GREEN}${BOLD}VukovOS v${VERSION} — Commands${RESET}\n"
+    echo -e "${CYAN}AI${RESET}        ask / brain start|stop|status / memory add|recall|list"
+    echo -e "${CYAN}SECURITY${RESET}  shield / audit / watch / panic [1-4] / guard"
+    echo -e "${CYAN}NETWORK${RESET}   vpn up|down / tor start|stop|ip"
+    echo -e "${CYAN}IDENTITY${RESET}  id / vault open|add"
+    echo -e "${CYAN}CRYPTO${RESET}    encrypt <file> / decrypt <file>"
+    echo -e "${CYAN}COMMS${RESET}     chat / sync"
+    echo -e "${CYAN}MACOS${RESET}     macos install|run|shell|vm|status"
+    echo -e "${CYAN}GAMING${RESET}    gaming"
+    echo -e "${CYAN}SYSTEM${RESET}    status / update / version / help"
+}
+
+case "$1" in
+    ask)       shift; echo -e "${CYAN}[VukovBrain]${RESET} Thinking..."; python3 "$SCRIPTS/vukov-brain-query.py" "$@" ;;
+    brain)     shift
+               case "$1" in
+                   start) "$LLAMA_SERVER" -m "$MODEL" -t 8 -c 2048 --port 11434 --log-disable -ngl 0 & sleep 20
+                          curl -s http://localhost:11434/health | grep -q "ok" && echo -e "${GREEN}[✓]${RESET} VukovBrain ready" ;;
+                   stop)  pkill -f llama-server && echo -e "${GREEN}[✓]${RESET} Stopped" ;;
+                   status) curl -s http://localhost:11434/health | grep -q "ok" && echo -e "${GREEN}[✓]${RESET} Online" || echo -e "${RED}[✗]${RESET} Offline" ;;
+               esac ;;
+    shield)    python3 "$SCRIPTS/vukov-shield.py" ;;
+    audit)     python3 "$SCRIPTS/vukov-audit.py" ;;
+    watch)     shift; python3 "$SCRIPTS/vukov-watch.py" "$@" ;;
+    panic)     shift; bash "$SCRIPTS/vukov-panic.sh" "$@" ;;
+    guard)     python3 "$SCRIPTS/vukov-guard.py" ;;
+    vpn)       shift; bash "$SCRIPTS/vukov-vpn.sh" "$@" ;;
+    tor)       shift; bash "$SCRIPTS/vukov-tor.sh" "$@" ;;
+    id)        bash "$SCRIPTS/vukov-id.sh" ;;
+    vault)     shift; python3 "$SCRIPTS/vukov-vault.py" "$@" ;;
+    encrypt)   shift; bash "$VUKOV_ROOT/encryption/vukov-crypt.sh" encrypt "$@" ;;
+    decrypt)   shift; bash "$VUKOV_ROOT/encryption/vukov-crypt.sh" decrypt "$@" ;;
+    chat)      python3 "$SCRIPTS/vukov-chat.py" ;;
+    sync)      python3 "$SCRIPTS/vukov-sync.py" ;;
+    memory)    shift; python3 "$SCRIPTS/vukov-memory.py" "$@" ;;
+    gaming)    bash "$SCRIPTS/vukov-gaming.sh" ;;
+    macos)     shift; bash "$SCRIPTS/vukov-macos.sh" "$@" ;;
+    update)    bash "$SCRIPTS/vukov-update.sh" ;;
+    status)    vukov_status ;;
+    version)   echo -e "${GREEN}VukovOS v${VERSION} Volk 🐺${RESET}" ;;
+    help|--help|-h) vukov_help ;;
+    "")        vukov_banner; vukov_status ;;
+    *)         echo -e "${RED}[!]${RESET} Unknown: $1 — run 'vukov help'" ;;
+esac
